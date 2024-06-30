@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/92-瀑布流自适应.css">
+</head>
+
+<body>
+    <div class="waterfall-wrapper">
+        <div class="waterfall-main">
+
+        </div>
+    </div>
+    <script>
+        let window_width;
+        let window_height;
+        window.addEventListener("load", () => {
+            window_width = window.innerWidth;
+            window_height = window.innerHeight;
+            if (window_width < 420) {
+                console.log("超小屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 1; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-eesm";
+                    waterfall_main.appendChild(col);
+                }
+            } else if (window_width < 576) {
+                console.log("超小屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 2; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-esm";
+                    waterfall_main.appendChild(col);
+                }
+            } else if (window_width < 768) {
+                console.log("小屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 3; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-sm";
+                    waterfall_main.appendChild(col);
+                }
+            } else if (window_width < 992) {
+                console.log("中屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 4; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-md";
+                    waterfall_main.appendChild(col);
+                }
+            } else if (window_width < 1200) {
+                console.log("大屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 5; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-lg";
+                    waterfall_main.appendChild(col);
+                }
+            } else if (window_width < 1400) {
+                console.log("超大屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 6; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-xlg";
+                    waterfall_main.appendChild(col);
+                }
+            } else {
+                console.log("超大大屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 8; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-xxlg";
+                    waterfall_main.appendChild(col);
+                }
+            }
+            //模拟加载初始内容
+            for (var i = 0; i < 50; i++) {
+                fetchData();
+            }
+        });
+        window.addEventListener("resize", () => {
+            window_width = window.innerWidth;
+            window_height = window.innerHeight;
+            if (window_width < 420) {
+                console.log("超小屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 1; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-eesm";
+                    waterfall_main.appendChild(col);
+                }
+            } else if (window_width < 576) {
+                console.log("超小屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 2; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-esm";
+                    waterfall_main.appendChild(col);
+                }
+            } else if (window_width < 768) {
+                console.log("小屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 3; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-sm";
+                    waterfall_main.appendChild(col);
+                }
+            } else if (window_width < 992) {
+                console.log("中屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 4; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-md";
+                    waterfall_main.appendChild(col);
+                }
+            } else if (window_width < 1200) {
+                console.log("大屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 5; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-lg";
+                    waterfall_main.appendChild(col);
+                }
+            } else if (window_width < 1400) {
+                console.log("超大屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 6; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-xlg";
+                    waterfall_main.appendChild(col);
+                }
+            } else {
+                console.log("超大大屏幕");
+                let waterfall_main = document.querySelector(".waterfall-main");
+                waterfall_main.innerHTML = "";
+                for (let i = 0; i < 8; i++) {
+                    let col = document.createElement("div");
+                    col.className = "col col-xxlg";
+                    waterfall_main.appendChild(col);
+                }
+            }
+            //模拟加载初始内容
+            for (var i = 0; i < 50; i++) {
+                fetchData();
+            }
+        });
+
+        function addItem(dom) {
+            //获取所有列元素
+            const cols = document.getElementsByClassName('col');
+            // 默认一共5列判断哪个列高度最小
+            let minHight = null;
+            let minIndex = 0;
+            for (var i = 0; i < cols.length; i++) {
+                if (minHight == null || minHight > cols[i].clientHeight) {
+                    minHight = cols[i].clientHeight;
+                    minIndex = i;
+                    console.log(minHight, i)
+                }
+            }
+
+            //在列里添加元素
+            cols[minIndex].appendChild(dom);
+        }
+        function createColItem() {
+            const dom = document.createElement('div');
+            dom.style.height = random(100, 400) + 'px';
+            dom.style.backgroundColor = 'rgba(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ',.5)';
+            return dom;
+        }
+        //模拟加载数据
+        function fetchData() {
+            const dom = createColItem();
+            addItem(dom);
+        }
+
+
+
+        var delay = null;
+        document.addEventListener('scroll', function () {
+            /*判断是否触底*/
+            //滚动条距离顶部距离
+            let st = document.documentElement.scrollTop;
+            //页面可视区域高度
+            let ch = document.documentElement.clientHeight;
+            //页面总高度
+            let sh = document.documentElement.scrollHeight;
+
+            //页面可视区域高度 + 滚动条距离顶部距离，大于页面总高度的99%则表示触底
+            //之后执行加载数据方法即可
+            if ((ch + st) > (sh * 0.99)) {
+                //触底
+                //delay 延迟加载，避免数据加载次数过多
+                if (!delay) {
+                    delay = setTimeout(function () {
+                        clearTimeout(delay);
+                        delay = null;
+                        //调用加载数据方法
+                        var num = 0;
+                        var addTimer = null;
+                        addTimer = setInterval(function () {
+                            fetchData();
+                            if (num > 5)
+                                clearInterval(addTimer);
+                            num++;
+                        }, 100)
+                    }, 100);
+                }
+            }
+        })
+
+        //获取范围内随机数，使元素高度随机
+        function random(min, max) {
+            var Range = max - min;
+            var Rand = Math.random();
+            var num = min + Math.round(Rand * Range); //舍去
+            return num;
+        }
+
+    </script>
+</body>
+
+</html>

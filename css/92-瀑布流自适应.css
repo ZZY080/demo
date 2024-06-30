@@ -1,0 +1,83 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.waterfall-wrapper {
+    padding:0 30px;
+    margin-top: 20px;
+}
+.waterfall-main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+/* 1列 */
+.waterfall-main  .col-eesm {
+    flex: 1; 
+}
+/* 2列 */
+.waterfall-main  .col-esm {
+    flex: 1; 
+    margin-right: 10px;
+}
+.waterfall-main  .col-esm:last-child {
+    margin-left: 0px;
+}
+
+/* 3列 */
+.waterfall-main  .col-sm {
+    flex: 1;
+    margin-right: 10px;
+}
+.waterfall-main  .col-sm:last-child {
+    margin-right: 0px ;
+}
+
+/* 4列 */
+.waterfall-main  .col-md {
+    flex: 1;
+    margin-right: 10px;
+}
+.waterfall-main  .col-md:last-child {
+    margin-right: 0;
+}
+
+/* 5列 */
+.waterfall-main  .col-lg {
+    flex: 1;
+    margin-right: 10px;
+}
+.waterfall-main  .col-lg:last-child {
+    margin-right: 0;
+}
+/* 6列 */
+.waterfall-main  .col-xlg {
+    flex: 1;
+    margin-right: 10px;
+}
+.waterfall-main  .col-xlg:last-child {
+    margin-right: 0;
+}
+/* 8列 */
+.waterfall-main  .col-xxlg {
+    flex: 1;
+    margin-right: 10px;
+}
+.waterfall-main  .col-xxlg:last-child{
+    margin-right: 0px;
+}
+/* 公用部分 */
+.waterfall-main  .col .item{
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+.waterfall-main .col .item .pic {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}

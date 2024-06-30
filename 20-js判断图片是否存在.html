@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let s = CheckImgExists("https://aiimg.justeasy.cn/img2img/202306/1685617233.png");
+        console.log(s)
+        function CheckImgExists(imgurl) {
+            var ImgObj = new Image(); //判断图片是否存在  
+            ImgObj.src = imgurl;
+            //没有图片，则返回-1  
+            if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
+                return true;
+            } else {
+                return false;
+            }
+        } 
+    </script>
+</body>
+
+</html>

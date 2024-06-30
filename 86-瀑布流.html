@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .itemBox {
+            width: 1050px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .item {
+            border: 1px solid #ccc;
+            padding: 4px;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="itemBox" id="itemBox">
+        <div class="item">
+            <img src="./assets/images/2.png" alt="">
+        </div>
+        <div class="item">
+            <img src="./assets/images/2.png" alt="">
+        </div>
+        <div class="item">
+            <img src="./assets/images/2.png" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_003.jpg" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_004.jpg" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_005.jpg" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_006.jpg" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_007.jpg" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_008.jpg" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_009.jpg" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_010.jpg" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_011.jpg" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_012.jpg" alt="">
+        </div>
+        <div class="item">
+            <img src="images/waterFull/P_013.jpg" alt="">
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            // 获取元素
+            var itemBox = document.getElementById('itemBox');
+            var items = document.getElementsByClassName('item');
+
+            // 1 获取到.itemBox 宽度
+            var itemBoxWidth = itemBox.offsetWidth;
+            // 2 获取到.item 宽度
+            var itemsWidth = items[0].offsetWidth; // 10 执行时图片还未加载出 使用window.onload 
+            // 3 求出列数
+            var column = parseInt(itemBoxWidth / itemsWidth);
+            // 4 求出间距
+            var distance = (itemBoxWidth - itemsWidth * column) / (column - 1);
+            // 5 实现瀑布流布局的方法 left top
+            // 定义一个容器存储一行内容的高度
+            var arr = [];
+            waterFull();
+            function waterFull() {
+                for (var i = 0; i < items.length; i++) {
+                    if (i < column) {
+                        items[i].style.left = (itemsWidth + distance) * i + 'px';
+                        arr[i] = items[i].offsetHeight;
+                    } else {
+                        // 第二行的top为第一行最小高度+间距 left的倍数对应最小高度的索引
+                        var min = getMin(arr).min;
+                        var minIndex = getMin(arr).minIndex;
+                        items[i].style.top = min + distance + 'px';
+                        items[i].style.left = (itemsWidth + distance) * minIndex + 'px';
+                        arr[minIndex] = min + distance + items[i].offsetHeight; //  数组中原最小高度成为了最大高度，替换arr[minIndex]的高度为：正上方元素的高度+间距+当前元素的高度
+                    }
+                }
+
+            }
+
+            // 获取arr中的最小高度及对应的索引
+            function getMin(arr) {
+                var obj = {};
+                obj.min = arr[0];
+                obj.minIndex = 0;
+
+                for (var i = 1; i < arr.length; i++) {
+                    if (obj.min > arr[i]) {
+                        obj.min = arr[i];
+                        obj.minIndex = i;
+                    }
+                }
+
+                return obj;
+            }
+
+            // 6 滚动页面时  arr中最小高度即将滚出页面底部时 加载数据 
+            window.onscroll = function () {
+                // console.log(window.pageYOffset);
+                // console.log(itemBox.scrollTop);
+                if (window.pageYOffset + window.innerHeight > getMin(arr).min) {
+                    var json = [
+                        { "src": "./assets/images/2.png" },
+                        { "src": "./assets/images/9.png" },
+                        { "src": "./assets/images/bg.png" },
+                        { "src": "./assets/images/no.png" },
+                        { "src": "./assets/images/2.png" },
+                        { "src": "./assets/images/2.png" },
+                        { "src": "./assets/images/2.png" },
+                        { "src": "./assets/images/2.png" },
+                        { "src": "./assets/images/2.png" },
+                        { "src": "./assets/images/2.png" },
+                    ];
+                    for (var i = 0; i < json.length; i++) {
+                        var img = document.createElement('img');
+                        img.src = json[i].src;
+                        var div = document.createElement('div');
+                        div.className = 'item';
+                        div.appendChild(img);
+                        itemBox.appendChild(div);
+                    }
+                    waterFull();
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

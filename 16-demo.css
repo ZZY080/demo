@@ -1,0 +1,35 @@
+.slider-div {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.slider-container {
+    flex: 1;
+    position: relative;
+    background-color: #d9d9d9;
+    height: 5px;
+    cursor: pointer;
+    border-radius: 2.5px;
+    margin-right: 19px;
+}
+
+.progress-bar {
+    background-color: #FF8D1C;
+    width: 5%;
+    height: 5px;
+    border-radius: 2.5px;
+}
+
+.slider-container #progressDot {
+    width: 14px;
+    height: 14px;
+    background: #ffffff;
+    border-radius: 50%;
+    border: 2px solid #FF8D1C;
+    position: absolute;
+    left: 5%;
+    top: -5px;
+}

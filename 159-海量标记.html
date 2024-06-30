@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+    <title>HELLO, AMAP!</title>
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css" />
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .custom-content-marker {
+            position: relative;
+            width: 25px;
+            height: 34px;
+            /* background-color: red; */
+        }
+
+        .custom-content-marker img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .custom-content-marker .close-btn {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            width: 15px;
+            height: 15px;
+            font-size: 12px;
+            background: #ccc;
+            border-radius: 50%;
+            color: #fff;
+            text-align: center;
+            line-height: 15px;
+            box-shadow: -1px 1px 1px rgba(10, 10, 10, .2);
+        }
+
+        .custom-content-marker .close-btn:hover {
+            background: #666;
+        }
+
+        #panel {
+            position: absolute;
+            background-color: white;
+            max-height: 90%;
+            overflow-y: auto;
+            top: 10px;
+            right: 5px;
+            width: 280px;
+        }
+
+        #panel .amap-call {
+            background-color: #009cf9;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        #panel .amap-lib-transfer {
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            overflow: hidden;
+        }
+    </style>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+</head>
+
+<body>
+    <div id="container"></div>
+    <div id="panel"></div>
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: "0af5b08fb0de38d8a73b871421784bc4",
+        };
+    </script>
+    <script src="https://a.amap.com/jsapi_demos/static/geojson/shanghai.js"></script>
+    <!-- <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script> -->
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <script src="https://webapi.amap.com/loader.js"></script>
+
+    <script type="text/javascript">
+        AMapLoader.load({
+            key: "c317a84998d832f0cb2ae6f838c8b358", //申请好的Web端开发者key，调用 load 时必填
+            version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
+        }).then((AMap) => {
+            //JS API 加载完成后获取AMap对象
+            //基本地图加载
+            var map = new AMap.Map("container", {
+                zoom: 10, //地图级别
+                center: [116.397428, 39.90923], //地图中心点
+                mapStyle: "amap://styles/whitesmoke", //设置地图的显示样式
+                viewMode: "2D", //设置地图模式
+            });
+            const labelsLayer = new AMap.LabelsLayer({
+                zooms: [3, 20],
+                zIndex: 1000,
+                collision: true, //该层内标注是否避让
+                allowCollision: true, //不同标注层之间是否避让  
+            });
+            //设置一个图标对象
+            const icon = {
+                type: "image", //图标类型，现阶段只支持 image 类型
+                image: "https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2F2023%2F0926%2F70923603j00s1laki000wc000go00b4g.jpg&thumbnail=660x2147483647&quality=80&type=jpg", //可访问的图片 URL
+                size: [64, 30], //图片尺寸
+                anchor: "center", //图片相对 position 的锚点，默认为 bottom-center
+            };
+            //设置文字对象
+            const text = {
+                content: "字节跳动", //要展示的文字内容
+                direction: "right", //文字方向，有 icon 时为围绕文字的方向，没有 icon 时，则为相对 position 的位置
+                offset: [-20, -5], //在 direction 基础上的偏移量
+                //文字样式
+                style: {
+                    fontSize: 12, //字体大小
+                    fillColor: "#22886f", //字体颜色
+                    strokeColor: "#fff", //描边颜色
+                    strokeWidth: 2, //描边宽度
+                },
+            };
+            //创建 LabelMarker
+            const labelMarker = new AMap.LabelMarker({
+                name: "标注", //此属性非绘制文字内容，仅为标识使用
+                position: [116.466994, 39.984904],
+                zIndex: 16,
+                rank: 1, //避让优先级
+                icon: icon, //标注图标，将 icon 对象传给 icon 属性
+                text: text, //标注文本，将 text 对象传给 text 属性
+            });
+            //添加一个 labelMarker
+            labelsLayer.add(labelMarker);
+            map.add(labelsLayer);
+
+        })
+            .catch((e) => {
+                console.error(e); //加载错误提示
+            });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #dashboardCanvas {
+            transform: rotate(124deg);
+        }
+
+        .increment {
+            cursor: pointer;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="dashboardCanvas" width="200" height="200"></canvas>
+    <div class="increment">+</div>
+
+    <script>
+        const canvas = document.getElementById('dashboardCanvas');
+        const ctx = canvas.getContext('2d');
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 80;
+        const startAngle = Math.PI / 2; // 从左侧开始
+        let endAngle = 0;
+        let percentage = 1; // 进度条百分比
+
+        function drawProgress(percentage) {
+            let process = percentage / 100;
+            // 绘制轨道
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 2 * Math.PI * 0, 2 * Math.PI * 0.80);
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 10;
+            ctx.stroke();
+
+            // 绘制进度条
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 2 * Math.PI * 0, 2 * Math.PI * process);
+            ctx.strokeStyle = '#1f8ceb';
+            ctx.lineWidth = 10;
+            ctx.stroke();
+            //   ctx.font = "14px Arial";
+            //   ctx.fillStyle="#000";
+            //   ctx.textAlign = "center";
+            //   ctx.textBaseline = "middle";
+            //   ctx.fillText = (percentage+"%",centerX,centerY);
+            // Display percentage text
+            
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(percentage + '%', centerX, centerY);
+        }
+
+        drawProgress(percentage);
+        let increment = document.querySelector(".increment");
+        increment.addEventListener("click", () => {
+            percentage += 1;
+            ctx.clearRect(0,0,200,200);
+            drawProgress(percentage);
+        })
+    </script>
+</body>
+
+</html>

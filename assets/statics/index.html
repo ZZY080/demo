@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件上传</title>
+    <style>
+        .header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .myfile {
+            outline: none;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 4px 20px;
+            margin-right: 10px;
+        }
+
+        .btns {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 10px;
+            padding: 5px 20px;
+            border-radius: 10px;
+            color: #fff;
+            background-color: #409EFF;
+            cursor: pointer;
+        }
+
+        .content .item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 200px;
+            margin: 10px 0;
+            padding: 10px 0;
+            border-radius: 5px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .content .item .pic {
+            width: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .content .item .desc {
+            display: none;
+            font-weight: 800;
+            font-size: 11px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <input type="file" accept="image/*" class="myfile" hidden>
+        <span class="btns">上传文件</span>
+    </div>
+    <div class="content">
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.5.0/axios.js"></script>
+    <script>
+        let ip = "http://itpzwg.natappfree.cc"
+        let myfile = document.querySelector(".myfile");
+        let btns = document.querySelector(".btns");
+        let files = null;
+        renderFileName();
+        btns.addEventListener("click", () => {
+            myfile.click();
+        })
+        myfile.addEventListener("change", (e) => {
+            let files = e.target.files[0];
+            axios.post(`${ip}/upload`, {
+                file: files,
+            }, { headers: { "Content-Type": "multipart/form-data" } }).then((res) => {
+                renderFileName();
+            })
+        });
+        function filedelete(e) {
+            let isComfirm = confirm("确认删除吗?");
+            if (isComfirm) {
+                let path = e.querySelector(".desc").innerText;
+                axios.delete(`${ip}/upload?path=${path}`).then((res) => {
+                    renderFileName();
+                })
+            }
+
+        }
+        function renderFileName() {
+            let contents = document.querySelector(".content");
+            axios.get(`${ip}/getfilename`).then((res) => {
+                let dataList = res.data;
+                let str = "";
+                dataList.forEach((item) => {
+                    str += `<div onclick="filedelete(this)" class="item">
+                            <img src="${item.imgsrc}" class="pic" />
+                            <span class="desc">${item.imgpath}</span>      
+                           </div>`
+                });
+                contents.innerHTML = str;
+            })
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            user-select: none; 
+        }
+        input {
+            user-select: none !important;
+        }
+        .right {
+            flex: 1;
+            padding-left: 15px;
+        }
+
+        .right .slider_bt {
+            margin-bottom: 20px;
+            cursor: text;
+        }
+
+        .right .slider_slider {
+            display: flex;
+            align-items: center;
+        }
+
+        .right .slider_slider .slider {
+            flex: 1;
+        }
+
+        .js-example-change-value {
+            display: flex;
+            align-items: center;
+        }
+
+        .js-example-change-value .rangeslider {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .rangeslider {
+            position: relative;
+        }
+
+
+        .rangeslider,
+        .rangeslider__fill {
+            background: #EDEDED;
+            display: block;
+            height: 6px;
+            border-radius: 10px;
+        }
+
+        .rangeslider__fill {
+            background: #FF8D1C;
+            position: absolute;
+            top: 0;
+        }
+
+        .rangeslider__handle {
+            background: #fff;
+            border: 2px solid #FF8D1C;
+            cursor: pointer;
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            top: -5px;
+            border-radius: 50%;
+        }
+
+        .js-example-change-value .valueNumber {
+            width: 48px;
+            height: 32px;
+            background: #FFF;
+            border-radius: 2px;
+            border: 1px solid #EDEDED;
+            text-align: center;
+            cursor:text ;
+        }
+
+        input,
+        select,
+        button {
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="right">
+        <div class="slider_bt">风格强度</div>
+        <div class="slider_slider">
+            <div class="slider">
+                <div class="js-example-change-value">
+                    <input type="range" min="0" max="1" step="0.01" value="0.65" data-rangeslider=""
+                        style="position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0;">
+                    <div class="rangeslider" id="js-rangeslider-2">
+                        <div class="rangeslider__fill" style="width: 104.64px;"></div>
+                        <div class="rangeslider__handle" style="left: 96.64px;"></div>
+                    </div>
+                    <input type="number" class="valueNumber" min="0" step="0.01" value="0.65"
+                        oninput="if(value>1)value=1;if(value<0)value=0" name="stylestrength">
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="text" value="123" name="" id="">
+</body>
+
+</html>

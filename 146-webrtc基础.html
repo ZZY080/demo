@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            background-color: blue;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <video class="myVideo" controls autoplay></video>
+    <audio class="myAudio" controls autoplay></audio>
+    <video class="recorderVideo" controls autoplay></video>
+    <audio class="recorderAudio" controls autoplay></audio>
+
+
+    <button class="startBtn">开始录制</button>
+    <button class="stopBtn">停止录制</button>
+    <button class="changeBtn">切换摄像头</button>
+    <script>
+        let currentStream=null;
+        let myVideo = document.querySelector(".myVideo");
+        let myAudio = document.querySelector(".myAudio");
+        let recorderVideo = document.querySelector(".recorderVideo");
+        let recorderAudio = document.querySelector(".recorderAudio");
+        let startBtn = document.querySelector(".startBtn");
+        let stopBtn = document.querySelector(".stopBtn");
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        function handleError(error) {
+            console.log(error);
+            alert("摄像头无法正常使用，请检查是否占用或缺失");
+            console.error("navigator.MediaDevices.getUserMedia error:", error.message, error.name);
+        }
+        /**
+         * @author 告别夏夜的萤火虫
+         * device list init
+         * 
+        */
+        function initInnerLocalDevice() {
+            const that = this;
+            // 存储本地设备信息
+            let localDevice = {
+                audioIn: [],
+                videoIn: [],
+                audioOut: [],
+            }
+            let constraints = {
+                video: {
+                    width: { min: 320, ideal: 1280, max: 1920 },
+                    height: { min: 240, ideal: 720, max: 1080 },
+                    facingMode: "user"
+                }, 
+                audio: true
+            };
+            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+                alert("浏览器不支持获取媒体设备");
+                return;
+            }
+            // 获取指定设备的流
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then((stream) => {
+                    currentStream=stream;
+                    myVideo.srcObject = stream;
+                    // 获取音频轨道
+                    const audioTracks = stream.getAudioTracks();
+                    // 获取视频轨道
+                    const videoTracks = stream.getVideoTracks();
+                    // 处理音频轨道
+                    audioTracks.forEach((track) => {
+                        console.log("Audio track:", track);
+                    });
+                    // 处理视频轨道
+                    videoTracks.forEach((track) => {
+                        console.log("Video track:", track);
+                    })
+                    // 屏幕录制 初始化MediaRecorder
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = (event) => {
+                        console.log(event.data)
+                        if (event.data.size > 0) {
+                            recordedChunks.push(event.data);
+                        }
+                    }
+                    mediaRecorder.onstop = () => {
+                        const blob = new Blob(recordedChunks);
+                        const url = URL.createObjectURL(blob);
+                        // 录制的视频播放
+                        recorderVideo.srcObject = null;
+                        recorderVideo.src = url;
+                        // 录制的音频播放
+                        recorderAudio.src = url;
+                        recordedChunks = [];
+                    }
+                    navigator.mediaDevices.enumerateDevices()
+                        .then((devices) => {
+                            devices.forEach((device) => {
+                                let obj = { id: device.deviceId, kind: device.kind, label: device.label };
+                                if (device.kind === "audioinput") {
+                                    if (localDevice.audioIn.filter(e => e.id === device.deviceId).length === 0) {
+                                        localDevice.audioIn.push(obj);
+                                    }
+                                }
+                                if (device.kind === "audiooutput") {
+                                    if (localDevice.audioOut.filter(e => e.id === device.deviceId).length === 0) {
+                                        localDevice.audioOut.push(obj);
+                                    }
+                                }
+                                if (device.kind === "videoinput") {
+                                    if (localDevice.videoIn.filter(e => e.id === device.deviceId).length === 0) {
+                                        localDevice.videoIn.push(obj);
+                                    }
+                                }
+
+                            })
+                            console.log(localDevice)
+                        })
+                }).catch(handleError)
+        }
+        initInnerLocalDevice();
+        startBtn.addEventListener("click", () => {
+            if (mediaRecorder.state == "inactive") {
+                mediaRecorder.start();
+            }
+        })
+        stopBtn.addEventListener("click", () => {
+            if (mediaRecorder.state == "recording") {
+                mediaRecorder.stop();
+            }
+        })
+    </script>
+</body>
+
+</html>

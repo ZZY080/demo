@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .nav-wrapper {
+
+        }
+        .nav-main {
+            display: flex;
+            flex-direction: row;
+        }
+        .nav-main .item {
+            position: relative;
+            height: 50px;
+            flex: 1;
+            text-align: center;
+            line-height: 50px;
+            background-color: #333;
+
+        }
+        .nav-main .item .word {
+            color: #fff;
+        }
+        .nav-main .item .sub-list {
+            width: 100%;
+            position: absolute;
+            top: 50px;
+            display: none;
+        }
+        .nav-main .item:hover .sub-list{
+            display: block;
+        }
+        .nav-main .item .sub-list .item {
+            height: 50px;
+
+        }
+        .nav-main .item .sub-list .sub-item:nth-child(odd){
+            background-color: #f2f2f2;
+        }
+        .nav-main .item .sub-list .sub-item:nth-child(even){
+            background-color: #e0e0e0;
+        }
+        .nav-main .item .sub-list .sub-item:hover{
+            background-color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav-wrapper">
+        <div class="nav-main">
+            <div class="item">
+                <div class="word">Menu1</div>
+                <div class="sub-list">
+                    <div class="sub-item">Submenu 1-1</div>
+                    <div class="sub-item">Submenu 1-2</div>
+                    <div class="sub-item">Submenu 1-3</div>
+                    <div class="sub-item">Submenu 1-4</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="word">Menu2</div>
+                <div class="sub-list">
+                    <div class="sub-item">Submenu 2-1</div>
+                    <div class="sub-item">Submenu 2-2</div>
+                    <div class="sub-item">Submenu 2-3</div>
+                    <div class="sub-item">Submenu 2-4</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="word">Menu3</div>
+                <div class="sub-list">
+                    <div class="sub-item">Submenu 3-4</div>
+                    <div class="sub-item">Submenu 3-4</div>
+                    <div class="sub-item">Submenu 3-4</div>
+                    <div class="sub-item">Submenu 3-4</div>
+                    <div class="sub-item">Submenu 3-4</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

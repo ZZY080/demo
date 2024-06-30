@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>
+        The <code>push()</code> method adds one or more elements to the end of an array and returns the new length of
+        the
+        array.
+    </p>
+
+    <code>123</code>
+    <script>
+        function success(data) {
+            console.log('获取到了data数据：')
+            console.log(data)
+        }
+    </script>
+    <script src="http://127.0.0.1:8080/jsonp?callback=success&name=kenny&age=22"></script>
+    <!-- <script>
+        fetch("http://127.0.0.1:8080/jsonp?callback=success&name=kenny&age=22")
+        .then((res)=>{
+            return res.json()
+        })
+        .then((data)=>{
+            console.log(data);
+        })
+    </script> -->
+</body>
+
+</html>

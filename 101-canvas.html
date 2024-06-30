@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        // 第一条路径
+        // ctx.beginPath();
+        // ctx.strokeStyle = 'blue';
+        // ctx.moveTo(20, 20);
+        // ctx.lineTo(200, 20);
+        // ctx.stroke();
+
+        // 第二条路径
+        // ctx.beginPath();
+        // ctx.strokeStyle = 'green';
+        // ctx.moveTo(20, 40);
+        // ctx.lineTo(200, 120);
+        // ctx.stroke();
+
+        // 画三角形
+        // ctx.beginPath();
+        // ctx.strokeStyle="red";
+        // ctx.moveTo(0,0);
+        // ctx.lineTo(30,0);
+        // ctx.lineTo(30,40);
+        // ctx.closePath();
+        // ctx.stroke();
+
+        // 贝塞尔曲线
+        ctx.beginPath();
+        ctx.moveTo(50,20);
+        ctx.quadraticCurveTo(230,30,50,100);
+        ctx.stroke();
+
+        ctx.fillStyle="blue";
+        ctx.fillRect(45,15,10,10);
+        ctx.fillRect(45,95,10,10);
+
+        ctx.fillStyle="red";
+        ctx.fillRect(255,25,10,10);
+
+    </script>
+</body>
+
+</html>

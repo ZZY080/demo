@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+    <title>HELLO, AMAP!</title>
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css" />
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .custom-content-marker {
+            position: relative;
+            width: 25px;
+            height: 34px;
+            /* background-color: red; */
+        }
+
+        .custom-content-marker img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .custom-content-marker .close-btn {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            width: 15px;
+            height: 15px;
+            font-size: 12px;
+            background: #ccc;
+            border-radius: 50%;
+            color: #fff;
+            text-align: center;
+            line-height: 15px;
+            box-shadow: -1px 1px 1px rgba(10, 10, 10, .2);
+        }
+
+        .custom-content-marker .close-btn:hover {
+            background: #666;
+        }
+        #panel {
+            position: absolute;
+            background-color: white;
+            max-height: 90%;
+            overflow-y: auto;
+            top: 10px;
+            right: 10px;
+            width: 280px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <div id="panel"></div>
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: "0af5b08fb0de38d8a73b871421784bc4",
+        };
+    </script>
+    <script src="https://webapi.amap.com/loader.js"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/geojson/shanghai.js"></script>
+
+    <script type="text/javascript">
+        AMapLoader.load({
+            key: "c317a84998d832f0cb2ae6f838c8b358", //申请好的Web端开发者key，调用 load 时必填
+            version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
+        }).then((AMap) => {
+            //JS API 加载完成后获取AMap对象
+            const layer = new AMap.createDefaultLayer({
+                zooms: [3, 20], //可见级别
+                visible: true, //是否可见
+                opacity: 1, //透明度
+                zIndex: 0, //叠加层级
+                resizeEnable: true
+            });
+            const map = new AMap.Map("container", {
+                // viewMode: '3D', //默认使用 2D 模式
+                zoom: 11, //地图级别
+                center: [116.397428, 39.90923], //地图中心点,
+                // resizeEnable: true,
+                layer: layer,
+                // mapStyle: "amap://styles/dark"
+            });
+            const traffic = new AMap.TileLayer.Traffic({
+                autoRefresh: true, //是否自动刷新，默认为false
+                interval: 180, //刷新间隔，默认180s
+            });
+            map.add(traffic); //通过add方法添加图层
+
+            AMap.plugin("AMap.ToolBar", function () {
+                let toolBar = new AMap.ToolBar();
+                map.addControl(toolBar);
+            })
+            const position = new AMap.LngLat(116.397428, 39.90923); //Marker 经纬度
+            const markerContent = `<div class="custom-content-marker">
+                                        <img src="//a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png">
+                                        <div class="close-btn" onclick="clearMarker()">X</div>
+                                   </div>`
+            const marker = new AMap.Marker({
+                position: position,
+                content: markerContent, //将 html 传给 content
+                offset: new AMap.Pixel(-13, -30), //以 icon 的 [center bottom] 为原点
+            });
+            map.add(marker);
+            function clearMarker() {
+                map.remove(marker); //清除 marker
+            }
+            document.querySelector(".close-btn").onclick = clearMarker; //绑定点击事件
+            function addPolygon(data) {
+                let polygon = new AMap.Polygon({
+                    path: data,
+                    fillColor: '#ccebc5',
+                    strokeOpacity: 1,
+                    fillOpacity: 0.5,
+                    strokeColor: '#2b8cbe',
+                    strokeWeight: 1,
+                    strokeStyle: 'dashed',
+                    strokeDasharray: [5, 5],
+                });
+                polygon.on('mouseover', () => {
+                    polygon.setOptions({
+                        fillOpacity: 0.7,
+                        fillColor: '#7bccc4'
+                    })
+                })
+                polygon.on('mouseout', () => {
+                    polygon.setOptions({
+                        fillOpacity: 0.5,
+                        fillColor: '#ccebc5'
+
+                    })
+                })
+                map.add(polygon);
+            }
+            addPolygon(shanghai);
+            // addPolygon(beijing);
+            // addPolygon(suzhou);
+            // addPolygon(wuxi);
+            AMap.plugin(["AMap.PlaceSearch"], function () {
+                //构造地点查询类
+                var placeSearch = new AMap.PlaceSearch({
+                    type:"酒店",
+                    pageSize: 5, // 单页显示结果条数
+                    pageIndex: 1, // 页码
+                    city: "010", // 兴趣点城市
+                    citylimit: false,  //是否强制限制在设置的城市内搜索
+                    map: map, // 展现结果的地图实例
+                    panel: "panel", // 结果列表将在此容器中进行展示。
+                    autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+                });
+                var cpoint=[116.405467,39.907761]
+                placeSearch.searchNearBy("",cpoint,2000,function(status,result){
+                    console.log(result)
+                })
+                //关键字查询
+                // placeSearch.search('南京航空航天大学');
+            });
+        })
+            .catch((e) => {
+                console.error(e); //加载错误提示
+            });
+    </script>
+</body>
+
+</html>

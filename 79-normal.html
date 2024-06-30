@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/normalize/8.0.1/normalize.css" rel="stylesheet">
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            height: 100px;
+            background-color: #67C23A;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+        }
+        .content .left {
+            width: 200px;
+            background-color: #409EFF;
+        }
+        .content .right {
+            flex: 1;
+            background-color: #F56C6C;
+        }
+        .footer {
+            height: 100px;
+            background-color: #909399;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">1</div>
+    <div class="content">
+        <div class="left">1</div>
+        <div class="right">2</div>
+    </div>
+    <div class="footer">footer</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        密码长度为 8 到 15 位；\n                    必须包含至少一个大写字母；\n                    必须包含至少一个小写字母；\n                    必须包含至少一个数字；\n                    可以包含特殊字符。
+    </div>
+    <script src="./js/jquery/jquery.js"></script>
+    <script>
+        $(function(){
+            $(".warnings").on("mouseenter",function(){
+                $(this).show();
+            })
+            $(".warnings").on("mouseleave",function(){
+                $(this).hide();
+            })
+        })
+    </script>
+</body>
+</html>

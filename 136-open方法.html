@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 class="open">open</h1>
+   <script>
+    let open = document.querySelector(".open");
+    open.onclick=()=>{
+        window.open("http://www.douyin.com","_blank",{
+            "name": "helloworld",
+            "fullscreen": "yes",
+            "location": "yes",
+            "width":"100vw",
+            "height":"100vh"
+           
+        })
+    }
+   </script>
+</body>
+
+</html>

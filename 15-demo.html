@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <link rel="stylesheet" href="./16-demo.css">
+</head>
+
+<body>
+    <div class="slider-div" style="visibility: hidden;">
+        <div class="slider_bt">匹配权重</div>
+        <div class="slider-container" id="slider-container">
+            <div class="progress-bar" id="progressBar"></div>
+            <span id="progressDot"></span>
+        </div>
+        <div id="num">0</div>
+    </div>
+    <script src="./js/jquery/jquery.js"></script>
+    <script>
+        $(function(){
+           
+            let startX=0;
+            let isDragging = false;
+            let total_width = Number($("#slider-container").css("width").split("px")[0]);
+            let bar_width = Number($("#progressBar").css("width").split("px")[0]);
+            console.log(total_width);
+            console.log($("#slider-container").actual("width",{clone:true}))
+            console.log(bar_width)
+            $("#progressDot").on("mousedown",function(event){
+                event.preventDefault();
+                startX=event.clientX;
+                isDragging=true;
+            })
+            $(document).on("mousemove",function(event){
+                event.preventDefault();
+                if(!isDragging){
+                    return;
+                }
+                let deltaX = event.clientX-startX;
+                let bar_new_width = (deltaX+bar_width);
+                let bar_new_percent= (bar_new_width/total_width*100).toFixed(2);
+                if(bar_new_percent<0){
+                    bar_new_percent=0;
+                }
+                if(bar_new_percent>100){
+                    bar_new_percent=100;
+                }
+                $("#progressBar").css("width",bar_new_percent+"%");
+                $("#progressDot").css("left",bar_new_percent+"%");
+                console.log(bar_new_percent)
+                $("#num").text((bar_new_percent*1*0.01).toFixed(2))
+
+                
+            })
+            $(document).on("mouseup",function(event){
+                event.preventDefault();
+                isDragging=false;
+                bar_width = Number($("#progressBar").css("width").split("px")[0]);
+            })
+        })
+    </script>
+</body>
+
+</html>

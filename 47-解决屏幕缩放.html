@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <title>Document</title>
+    <style>
+        .large {
+            width: 10rem;
+            height: 10rem;
+            background-color: aquamarine;
+        }
+
+        /* 
+            % 设置的 font-size: 62.5% 是相对于浏览器的默认字体大小（通常是 16px）来计算的。浏览器默认的字体大小是所有网页的基准值 
+         */
+
+        @media screen and (max-width:767px) {
+            html {
+                font-size: 50%;
+            }
+        }
+
+        @media screen and (min-width:768px) and (max-width:1023px) {
+            html {
+                font-size: 62.5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="large">
+
+        </div>
+        <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+        </svg>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="btn">点我</button>
+    <script>
+        // 先说共同点
+        // 防抖 和 节流 函数都是为了 限制函数的执行频次，从而优化函数触发频率过高导致的响应速度跟不上触发频率，导致出现延迟、卡顿的现象以及其他错误。 是常见的前端性能优化技巧。
+        // 概念： 单位时间内，触发一个事件，只会触发一次（一定时间内只触发一次函数）
+
+        // 1.时间戳实现
+        // 实现： 声明变量存储上一次的触发事件，每一次触发获取当前时间，判断当前时间与上一次触发时间是否超过间隔，如果超过则执行事件处理代码，存储本次触发时间。
+        let lastTime = null;
+        let btn = document.getElementById("btn");
+        btn.onclick = function () {
+            let currentTime = Date.now();
+            if (currentTime - lastTime >= 3000) {
+                console.log(this.innerHTML)
+                // 存储本次的触发时间
+                lastTime = currentTime;
+            }
+        }
+    </script>
+</body>
+
+</html>

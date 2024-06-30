@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Page (Domain B)</title>
+</head>
+<body>
+    <h1>Child Page (Domain B)</h1>
+    <button onclick="sendMessageToParent()">Send Message to Parent</button>
+
+    <script>
+        function sendMessageToParent() {
+            // const parentWindow = window.parent ;
+            const parentWindow = window.parent ;
+            if (parentWindow) {
+                parentWindow.postMessage('Hello from Child Page (Domain B)', 'file://');
+            } else {
+                console.error('Parent window not found.');
+            }
+        }
+    </script>
+</body>
+</html>

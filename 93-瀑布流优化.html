@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/92-瀑布流自适应.css">
+</head>
+
+<body>
+    <div class="waterfall-wrapper">
+        <div class="waterfall-main">
+
+        </div>
+    </div>
+    <script>
+        let window_width;
+        let window_height;
+        let page=1;
+        function common_create_col(col_num, col_classname) {
+            let waterfall_main = document.querySelector(".waterfall-main");
+            waterfall_main.innerHTML = "";
+            for (let i = 0; i < col_num; i++) {
+                let col = document.createElement("div");
+                col.className = `col ${col_classname}`;
+                waterfall_main.appendChild(col);
+            }
+        }
+        function load_or_resize() {
+            page=1;
+            window_width = window.innerWidth;
+            window_height = window.innerHeight;
+            if (window_width < 420) {
+                console.log("超小屏幕");
+                common_create_col(1, "col-eesm");
+            } else if (window_width < 576) {
+                console.log("超小屏幕");
+                common_create_col(2, "col-esm");
+            } else if (window_width < 768) {
+                console.log("小屏幕");
+                common_create_col(3, "col-sm");
+            } else if (window_width < 992) {
+                console.log("中屏幕");
+                common_create_col(4, "col-md");
+            } else if (window_width < 1200) {
+                console.log("大屏幕");
+                common_create_col(5, "col-lg");
+            } else if (window_width < 1400) {
+                console.log("超大屏幕");
+                common_create_col(6, "col-xlg");
+            } else {
+                console.log("超大大屏幕");
+                common_create_col(8, "col-xxlg");
+            }
+            fetchData();
+        }
+        window.addEventListener("load", load_or_resize);
+        window.addEventListener("resize", load_or_resize);
+        //获取范围内随机数，使元素高度随机
+        function random(min, max) {
+            var Range = max - min;
+            // 用于生成一个位于 0（包括 0）到 1（但不包括 1）之间的随机浮点数。
+            var Rand = Math.random();
+            var num = min + Math.round(Rand * Range); //舍去
+            return num;
+        }
+        function createColItem(item) {
+            const dom = document.createElement('div');
+            dom.className = "item"
+            dom.style.height = random(100, 200) + 'px';
+            dom.style.backgroundColor = 'rgba(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ',.5)';
+            // const imgs = document.createElement("img");
+            // imgs.className = "pic";
+            // imgs.src = `${item.src}`;
+            // dom.appendChild(imgs);
+            return dom;
+        }
+        function addItem(colItem) {
+            //获取所有列元素
+            const cols = document.getElementsByClassName('col');
+            // 默认一共5列判断哪个列高度最小
+            let minHight = null;
+            let minIndex = 0;
+            for (var i = 0; i < cols.length; i++) {
+                if (minHight == null || minHight > cols[i].clientHeight) {
+                    minHight = cols[i].clientHeight;
+                    minIndex = i;
+                }
+            }
+
+            //在列里添加元素
+            cols[minIndex].appendChild(colItem);
+        }
+        //模拟加载数据
+        function fetchData() {
+            let data = [
+                {
+                    id:1,
+                    src:"./bgc.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc4.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc5.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc6.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc6.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc4.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+                {
+                    id:2,
+                    src:"./bgc3.png",
+                },
+            ]
+            data.forEach((item,index)=>{
+                const colItem = createColItem(item);
+                addItem(colItem);
+            })
+        }
+        var delay = null;
+        document.addEventListener('scroll', function () {
+            /*判断是否触底*/
+            //滚动条距离顶部距离
+            let st = document.documentElement.scrollTop;
+            //页面可视区域高度
+            let ch = document.documentElement.clientHeight;
+            //页面总高度
+            let sh = document.documentElement.scrollHeight;
+           
+            //页面可视区域高度 + 滚动条距离顶部距离，大于页面总高度的99%则表示触底
+            //之后执行加载数据方法即可
+            if ((ch + st) > (sh * 0.98)) {
+                //触底
+                page=page+1;
+                console.log(page);
+                fetchData();
+            }
+        })
+    </script>
+</body>
+
+</html>

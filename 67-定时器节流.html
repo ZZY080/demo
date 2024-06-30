@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="timer">60</div>
+  <button onclick="startTimer()">获取验证码</button>
+
+  <script>
+    let remainingTime = 60;
+    let isCounting = false;
+
+    function updateTimer() {
+      const timerElement = document.getElementById('timer');
+      if (remainingTime > 0) {
+        remainingTime--;
+        timerElement.innerText = remainingTime;
+      } else {
+        clearInterval(timerInterval);
+        isCounting = false;
+        timerElement.innerText = '60';
+      }
+    }
+
+    function startTimer() {
+      if (!isCounting) {
+        isCounting = true;
+        const timerElement = document.getElementById('timer');
+        timerElement.innerText = remainingTime;
+        const timerInterval = setInterval(updateTimer, 1000);
+      }
+    }
+  </script>
+</body>
+</html>

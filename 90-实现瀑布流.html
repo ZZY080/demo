@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Example</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link href="" rel="stylesheet">
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .waterfall-wrapper {
+            padding: 0 20px;
+        }
+        .waterfall-main {
+            /* width: 1200px; */
+            /* margin: 20px auto 0; */
+        }
+
+        .waterfall-main:after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1px;
+            clear: both;
+        }
+
+        .waterfall-main>.col {
+            float: left;
+            width: 20%;
+        }
+
+        .waterfall-main>.col:nth-child(5n) {
+            margin-right: 0;
+        }
+
+        .waterfall-main>.col div {
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="waterfall-wrapper">
+        <div class="waterfall-main">
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        function addItem(dom) {
+            //获取所有列元素
+            const cols = document.getElementsByClassName('col');
+            // 默认一共5列判断哪个列高度最小
+            let minHight = null;
+            let minIndex = 0;
+            for (var i = 0; i < cols.length; i++) {
+                if (minHight == null || minHight > cols[i].clientHeight) {
+                    minHight = cols[i].clientHeight;      
+                    minIndex = i;
+                    console.log(minHight,i)
+                }
+            }
+
+            //在列里添加元素
+            cols[minIndex].appendChild(dom);
+        }
+        function createColItem() {
+            const dom = document.createElement('div');
+            dom.style.height = random(100, 400) + 'px';
+            dom.style.backgroundColor = 'rgba(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ',.5)';
+            return dom;
+        }
+        //模拟加载数据
+        function fetchData() {
+            const dom = createColItem();
+            addItem(dom);
+        }
+
+        //模拟加载初始内容
+        for (var i = 0; i < 30; i++) {
+            fetchData();
+        }
+
+        var delay = null;
+        document.addEventListener('scroll', function () {
+            /*判断是否触底*/
+            //滚动条距离顶部距离
+            let st = document.documentElement.scrollTop;
+            //页面可视区域高度
+            let ch = document.documentElement.clientHeight;
+            //页面总高度
+            let sh = document.documentElement.scrollHeight;
+
+            //页面可视区域高度 + 滚动条距离顶部距离，大于页面总高度的99%则表示触底
+            //之后执行加载数据方法即可
+            if ((ch + st) > (sh * 0.99)) {
+                //触底
+                //delay 延迟加载，避免数据加载次数过多
+                if (!delay) {
+                    delay = setTimeout(function () {
+                        clearTimeout(delay);
+                        delay = null;
+                        //调用加载数据方法
+                        var num = 0;
+                        var addTimer = null;
+                        addTimer = setInterval(function () {
+                            fetchData();
+                            if (num > 5)
+                                clearInterval(addTimer);
+                            num++;
+                        }, 100)
+                    }, 100);
+                }
+            }
+        })
+
+        //获取范围内随机数，使元素高度随机
+        function random(min, max) {
+            var Range = max - min;
+            var Rand = Math.random();
+            var num = min + Math.round(Rand * Range); //舍去
+            return num;
+        }
+    </script>
+</body>
+
+</html>

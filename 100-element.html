@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .border-main .item {
+            width: 100px;
+            height: 70px;
+            border: 1px solid #c0c4cc;
+            border-radius: 4px;
+            /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04); */
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        }
+        .radio-main  {
+            display: flex;
+            flex-direction: row;
+        }
+        .radio-main .item {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .radio-main .item .circle  {
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            border: 1px #c0c4cc solid;
+            margin-right: 10px;
+        }
+        .radio-main .item.active .circle {
+           
+            
+            
+            /* background-color: aliceblue; */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="border-wrapper">
+        <div class="border-main">
+            <div class="item"></div>
+        </div>
+    </div>
+    <div class="radio-wrapper">
+        <div class="radio-main">
+            <div class="item active">
+                <div class="circle"></div>
+                <div class="desc">A</div>
+            </div>
+            <div class="item">
+                <div class="circle"></div>
+                <div class="desc">B</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

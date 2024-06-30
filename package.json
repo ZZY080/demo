@@ -1,0 +1,44 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZZY080/demo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZZY080/demo/issues"
+  },
+  "homepage": "https://github.com/ZZY080/demo#readme",
+  "dependencies": {
+    "4": "*",
+    "alipay-sdk": "^3.6.1",
+    "axios": "^1.6.8",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.17.1",
+    "express-jwt": "^5.3.3",
+    "express-session": "^1.18.0",
+    "fft-js": "^0.0.12",
+    "fs-extra": "^11.1.1",
+    "handle-err": "^0.1.8",
+    "iconv-lite": "^0.5.1",
+    "jest": "^29.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "moment-timezone": "^0.5.45",
+    "mongoose": "^7.6.4",
+    "multer": "*",
+    "multiparty": "^4.2.3",
+    "paypal-rest-sdk": "^1.8.1",
+    "supertest": "^6.3.3"
+  }
+}

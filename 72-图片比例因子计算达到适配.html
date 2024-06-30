@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+           
+        }
+        .container .list {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            
+
+        }
+        .container .item {
+            width: 300px;
+            margin:0 2px 20px 0;
+        }
+        img {
+            width: 100%;
+            /* height: 100%; */
+            border-radius: 20px;
+            overflow: hidden;
+            object-fit: contain;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="list">
+            <div class="item">
+                <img src="https://small.justeasy.cn/effect/202311/20231107103252_6549a1d405996.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="https://small.justeasy.cn/effect/202311/20231107103252_6549a1d405996.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="https://small.justeasy.cn/effect/202311/20231107103252_6549a1d405996.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="https://small.justeasy.cn/effect/202311/20231107103252_6549a1d405996.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="https://small.justeasy.cn/effect/202311/20231107103252_6549a1d405996.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="https://small.justeasy.cn/effect/202311/20231107103252_6549a1d405996.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="https://small.justeasy.cn/effect/202311/20231107103252_6549a1d405996.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="https://small.justeasy.cn/effect/202310/20231030163520_653f6ac8448a9.jpg" alt="">
+            </div>
+        </div> 
+    </div>
+    <script>
+        let img = new Image();
+      
+        img.src = "https://small.justeasy.cn/effect/202310/20231030163520_653f6ac8448a9.jpg";
+        img.onload=function(){
+            let {width,height}=img;
+            let img_w_h_scale = width/height;
+            console.log(width,height);
+            console.log(img_w_h_scale);
+        }
+    </script>
+</body>
+</html>

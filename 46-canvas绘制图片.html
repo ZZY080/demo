@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            background-color: rebeccapurple;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="400" height="400" id="canvas"></canvas>
+    <script>
+        var canvas = document.getElementById("canvas")
+        var ctx = canvas.getContext("2d")
+        var img = new Image()
+        let pause = false, frameCounter = 0, i = 0;
+        img.src = "https://small.justeasy.cn/202307/20230713105142_64af66be69ed7.jpg";
+        img.onload = function () {
+            ctx.drawImage(img,0,0,40,40,0,0,200,200);
+            
+        }
+
+    </script>
+
+</body>
+
+</html>

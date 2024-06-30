@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            
+        }
+        .container-wrapper {
+            display: flex;
+            width: 100%;
+            height: 200px;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+        .container-main {
+            position: relative;
+        }
+        .container-main .trackCanvas {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;  
+            width: 100px !important;
+            height: 100px !important;
+        }
+        .container-main .progressCanvas {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px !important;
+            height: 100px !important;
+        }
+        .btns-wrapper {
+           
+
+        }
+        .btn-main {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        .btn-main .increment {
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.3);
+        }
+        .btn-main .decrement {
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.3);
+           margin-right: 5px;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div  class="container-wrapper">
+       <div class="container-main">
+        <canvas id="trackCanvas" class="trackCanvas" width="100px" height="100px"></canvas>
+        <canvas id="progressCanvas" class="progressCanvas" width="100px" height="100px"></canvas>
+       </div>
+    </div>
+    <div class="btns-wrapper">
+        <div class="btn-main">
+            <div class="item decrement">-</div>
+            <div class="item increment">+</div>   
+        </div>
+    </div>
+
+    <script>
+        let ctx1 = null;
+        let ctx2=null;
+        function drawCircleTrack(bgColor) {
+            const canvas = document.getElementById('trackCanvas');
+            ctx1 = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 40;
+
+            ctx1.beginPath();
+            ctx1.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx1.lineWidth = 5;
+            ctx1.strokeStyle = bgColor;
+            ctx1.stroke();
+        }
+
+        function drawCircleProgress(percentage, bgColor, progressColor) {
+            const canvas = document.getElementById('progressCanvas');
+            ctx2 = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 40;
+            const startAngle = -0.5 * Math.PI;
+            const endAngle = (percentage / 100) * 2 * Math.PI + startAngle;
+
+            ctx2.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Progress Circle
+            ctx2.beginPath();
+            ctx2.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx2.lineWidth = 5;
+            ctx2.strokeStyle = progressColor;
+            ctx2.stroke();
+
+            // Display percentage text
+            ctx2.font = '14px Arial';
+            ctx2.fillStyle = '#000';
+            ctx2.textAlign = 'center';
+            ctx2.textBaseline = 'middle';
+            ctx2.fillText(percentage + '%', centerX, centerY);
+            // 绘制图片
+            const image = new Image();
+            image.src = "https://dss3.baidu.com/-rVXeDTa2gU2pMbgoY3K/it/u=461303309,1100799494&fm=202";
+            image.onload = function(){
+                ctx2.drawImage(image,centerX-20,centerY-20,40,40);
+            }
+        }
+        let process = 10;
+        function update(process){
+            drawCircleTrack('#ccc'); // Draw the track
+            drawCircleProgress(process, '#fff', '#1f8ceb'); // Draw the progress bar
+        }
+        let decrement = document.querySelector(".decrement");
+        let increment = document.querySelector(".increment");
+        decrement.addEventListener("click",()=>{
+            ctx1.clearRect(0,0,100,100);
+            ctx2.clearRect(0,0,100,100);
+            process-=10;
+            update(process);
+        })
+        increment.addEventListener("click",()=>{
+            ctx1.clearRect(0,0,100,100);
+            ctx2.clearRect(0,0,100,100);
+            process+=10;
+            update(process);
+        })
+        update(process);
+
+       
+       
+
+
+    </script>
+</body>
+
+</html>

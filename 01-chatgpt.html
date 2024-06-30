@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPT-4 API Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .chat-container {
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #result {
+            position: relative;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            height: 250px;
+            overflow-wrap: break-word;
+            overflow-y: auto;
+            
+        }
+        #result::-webkit-scrollbar {
+            width: 2px;
+            height: 5px;
+            border-radius: 2px;   
+        }
+        #result::-webkit-scrollbar-thumb {
+           background-color: #8B8B8B;
+        }
+        #result .item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+
+        }
+        #result .item .user {
+            display: flex;
+            flex-direction: row;
+        }
+        #result .item .user .icon {
+          margin-right: 10px;
+        
+        }
+        #result .item .user .word {
+            color: #666;
+        }
+        #result .item .chat {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        #result .clear {
+             width: 20px;
+             height: 20px;
+             position: absolute;
+             background-image: url("./Clearup.png");
+             background-repeat: no-repeat;
+             background-size: 100% 100%;
+             top: 0;
+             right: 5px;
+        }
+        #chat-form {
+            margin-top: 80px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        #user-input {
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        #submitBtn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        #submitBtn:hover {
+            background-color: #45a049;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <h1>GPT-4 API Chat</h1>
+
+        <div id="result">
+                <div class="item">
+                      <div class="user">
+                          <div class="icon">user:</div>
+                          <div class="word">新闻联播》是中央广播电视总台每日晚间播出的一档新闻节目，被称为“中国政坛的风向标”，节目宗旨为“宣传党和政府的声音，传播天下大事”。新闻联播》是中央广播电视总台每日晚间播出的一档新闻节目，被称为“中国政坛的风向标”，节目宗旨为“宣传党和政府的声音，传播天下大事”。新闻联播》是中央广播电视总台每日晚间播出的一档新闻节目，被称为“中国政坛的风向标”，节目宗旨为“宣传党和政府的声音，传播天下大事”。上课了佳都科技阿拉斯加抗打击考拉手机打考拉手机打手机打卡拉萨而同仁堂热热节日快乐加热机认可加热可燃加了科技热加热居然考拉</div>
+                      </div>
+                </div>
+                <div class="item">
+                    <div class="user">
+                        <div class="icon">user:</div>
+                        <div class="word">新闻联播》是中央广播电视总台每日晚间播出的一档新闻节目，被称为“中国政坛的风向标”，节目宗旨为“宣传党和政府的声音，传播天下大事”。新闻联播》是中央广播电视总台每日晚间播出的一档新闻节目，被称为“中国政坛的风向标”，节目宗旨为“宣传党和政府的声音，传播天下大事”。新闻联播》是中央广播电视总台每日晚间播出的一档新闻节目，被称为“中国政坛的风向标”，节目宗旨为“宣传党和政府的声音，传播天下大事”。新闻联播》是中央广播电视总台每日晚间播出的一档新闻节目，被称为“中国政坛的风向标”，节目宗旨为“宣传党和政府的声音，传播天下大事”。新闻联播》是中央广播电视总台每日晚间播出的一档新闻节目，被称为“中国政坛的风向标”，节目宗旨为“宣传党和政府的声音，传播天下大事”。上课了佳都科技阿拉斯加抗打击考拉手机打考拉手机打手机打卡拉萨</div>
+                    </div>
+                </div>
+        </div>
+        <form id="chat-form">
+            <input type="text" id="user-input" name="user_input" placeholder="Type your message..." />
+            <button type="submit" id="submitBtn" class="word">问答模式</button>
+            <button type="submit" id="submitBtn" class="chat">对话模式</button>
+            <button type="submit" id="submitBtn" class="clear">清空对话</button>
+            <button type="submit" id="submitBtn" class="pic">文生图模式</button>
+        </form>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // 获取数据的接口
+        $(function () {
+            $("#chat-form").on("submit", function (event) {
+                // 阻止表单跳转
+                event.preventDefault();
+                let userInput = $("#user-input").val();
+            })
+            $(".word").on("click",function(){
+                    let userInput = $("#user-input").val();
+                    let url = `/gpt4?user_input=${encodeURIComponent(userInput)}`;
+                    console.log(1)
+                    fetch(url)
+                    .then((response) => response.json())
+                    .then((data) => {
+
+                        let content = data.content;
+                        $("#result").html(content);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching GPT-4 response:", error);
+                    });
+                })
+            $(".chat").on("click",function(){
+                    let userInput = $("#user-input").val();
+                    let url = `/gpt4chat?user_input=${encodeURIComponent(userInput)}`;
+                    fetch(url)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        let content = data.content;
+                        $("#result").html("");
+                        let str=""
+						content.forEach((item,index)=>{
+                            str=str+`<div class="item">
+                                        <div class="user">
+                                                <div class="icon">${item.role}:</div>
+                                                <div class="word">${item.content}</div>
+                                        </div>
+
+                                     </div>`
+                        })
+                        $("#result").html(str);
+
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching GPT-4 response:", error);
+                    });
+                })
+            $(".clear").on("click",function(){
+
+                    let url = `/chatrefresh`;
+                    console.log(1)
+                    fetch(url)
+                    .then((response) => response.json())
+                    .then((data) => {
+
+                        let content = data.content;
+                        $("#result").html(content);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching GPT-4 response:", error);
+                    });
+                })
+            $(".pic").on("click",function(){
+                    let userInput = $("#user-input").val();
+                    let url = `/gpt4image?user_input=${encodeURIComponent(userInput)}`;
+                    fetch(url)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        let content = data.content;
+                        let imgs  = $(`<img  src='data:image/png;base64,${content}'/>`)
+                        $("#result").append(imgs);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching GPT-4 response:", error);
+                    });
+                })
+        })
+    </script>
+</body>
+
+</html>

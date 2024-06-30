@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+        .qrcode-container {
+            position: relative;
+        }
+        .qrcode-container .mask.expires {
+            display: block;
+        }
+        .qrcode-container .mask {
+            display: none;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .qrcode-container .mask  .icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            background-image: url("./images/refresh.png");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            z-index: 4;
+        }
+        .qrcode-container .mask  .word {
+            color: white;
+            position: absolute;
+            top: 75%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            z-index: 4;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="qrcode-container">
+            <div id="qrcode"></div>
+            <div class="mask">
+                <div class="icon"></div>
+                <div class="word">二维码已过期</div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/jquery/jquery.js"></script>
+    <script src="./js/demo/qrcode.js"></script>
+    <script src="./js/demo/script2.js"></script>
+    
+</body>
+
+</html>

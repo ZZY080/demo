@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/bootstrap.css" />
+</head>
+
+<body>
+  <form class="navbar-form navbar-left" role="search">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Search">
+    </div>
+  </form>
+  <script>
+    //2. 防抖：在事件被触发n秒后再执行方法，如果在这n秒内又被触发，则重新计算函数执行时间
+    function getData(keyword) {
+        console.log(keyword)
+    }
+    function debounce(fn, delay) {
+      let timer = null;
+      return (event) => {
+        let that = this;
+        if (timer) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          let keywords = event.target.value;
+          fn.call(that, keywords);
+          timer = null;
+        }, delay)
+      }
+    }
+    let keyInput = document.querySelector(".form-control");
+    keyInput.addEventListener("input", debounce(getData, 1000))
+  </script>
+</body>
+
+</html>

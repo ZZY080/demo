@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="600" height="400" style="border:1px solid #d3d3d3;">
+        Your browser does not support the HTML5 canvas tag.
+    </canvas>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        // 示例：绘制一个视频通话按钮
+        ctx.fillStyle = "#4CAF50";
+        ctx.fillRect(50, 50, 100, 50);
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.fillText("视频通话", 65, 80);
+        // 示例：获取视频流并渲染到Canvas上
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                var video = document.createElement('video');
+                video.srcObject = stream;
+                video.onloadedmetadata = function (e) {
+                    video.play();
+                };
+                // 将视频流渲染到Canvas上
+                setInterval(function () {
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                }, 0);
+            })
+            .catch(function (err) {
+                console.log("An error occurred: " + err);
+            });
+        // 示例：添加按钮点击事件处理程序
+        canvas.addEventListener('click', function (event) {
+            var rect = canvas.getBoundingClientRect();
+            var x = event.clientX - rect.left;
+            var y = event.clientY - rect.top;
+            if (x > 50 && x < 150 && y > 50 && y < 100) {
+                // 执行视频通话操作
+                console.log("视频通话按钮被点击");
+            }
+        });
+
+    </script>
+</body>
+
+</html>

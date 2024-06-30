@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/bootstrap.css" />
+</head>
+
+<body>
+    <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+        </div>
+    </form>
+    <script>
+        //   节流：预先设定一个执行周期，当用户连续触发某一方法，则在这个周期内只执行一次，然后进入下一个新周期
+        function getData(keyword) {
+            console.log(keyword)
+        }
+        function throttle(fn, delay) {
+            let timer = null;
+            return (event) => {
+                let that = this;
+                if (timer) {
+                    return;
+                }
+                timer = setTimeout(() => {
+                    let keywords = event.target.value;
+                    fn.call(that, keywords);
+                    timer = null;
+                }, delay)
+            }
+        }
+        let keyInput = document.querySelector(".form-control");
+        keyInput.addEventListener("input", throttle(getData, 4000))
+    </script>
+</body>
+
+</html>

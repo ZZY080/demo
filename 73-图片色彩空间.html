@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <img id="sourceImage" src="https://small.justeasy.cn/effect/202310/20231030163520_653f6ac8448a9.jpg" alt="Source Image" />
+    <canvas id="outputCanvas" width="400" height="300"></canvas>
+    <script>
+      const sourceImage = document.getElementById("sourceImage");
+      const canvas = document.getElementById("outputCanvas");
+      const context = canvas.getContext("2d");
+
+      sourceImage.onload = function () {
+        // Draw the image onto the canvas
+        context.drawImage(sourceImage, 0, 0);
+
+        // Get the image data
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        // Convert the color space to grayscale
+        for (let i = 0; i < data.length; i += 4) {
+          const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+          data[i] = 150; // Red
+          data[i + 1] = 150; // Green
+          data[i + 2] = avg; // Blue
+        }
+
+        // Put the grayscale image data back onto the canvas
+        context.putImageData(imageData, 0, 0);
+      };
+    </script>
+  </body>
+</html>

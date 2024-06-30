@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 class="open">open</h1>
+    <script>
+        function Person(name, age, gender) {
+            this.name = name;
+            this.age = age;
+            this.gender = gender;
+        }
+        Person.prototype.sayName=function(){
+            console.log("Hello 大家好 我是："+this.name)
+        }
+
+        //创建一个Person的实例
+        var per = new Person("孙悟空", 18, "男");
+        var per2 = new Person("猪八戒", 28, "男");
+        per.sayName();
+        per2.sayName();
+
+        console.log(per.sayName == per2.sayName);  //打印结果为false
+    </script>
+</body>
+
+</html>

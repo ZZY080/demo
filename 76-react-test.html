@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root">
+
+    </div>
+    <script src="./75-react.js"></script>
+    <script>
+        // 示例应用
+        const element = React.createElement(
+            "div",
+            { id: "container" },
+            React.createElement("h1", {id:"title"}, "Hello, Custom React!"),
+            React.createElement("p", {id:"desc"}, "This is a simple custom React framework."),
+            React.createElement("ul", {id:"desc"},  React.createElement("li", {id:"title"}, "Hello, Custom React!"), React.createElement("li", {id:"title"}, "Hello, Custom React!"))
+        );
+        console.log(element);
+
+        const container = document.getElementById("root");
+        ReactDOM.render(element, container);
+    </script>
+</body>
+
+</html>

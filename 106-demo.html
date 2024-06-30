@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <base href="http://www.douyin.com"/>
+    <base href="http://www.baidu.com"/>
+    <style>
+        div p {
+            color: black;
+        }
+        p{
+            color: red;
+        }
+        .box {
+            color: blue;
+        }
+        #box {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+  <script>
+    let xhr=new XMLHttpRequest();
+    xhr.open("GET","http://www.baidu.com");
+    xhr.send();
+    xhr.addEventListener("readystatechange",()=>{
+        if(xhr.readyState===4&&xhr.status===200){
+            console.log(xhr.responseText);
+        }
+    })
+  </script>
+</body>
+</html>

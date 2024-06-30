@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <input type="file" accept="image/*" onchange="handleFile(this.files)" />
+    <canvas id="outputCanvas" width="400" height="300"></canvas>
+    <script>
+      function handleFile(files) {
+        const file = files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+          const img = new Image();
+          img.onload = function () {
+            const canvas = document.getElementById("outputCanvas");
+            const ctx = canvas.getContext("2d");
+
+            // Set the canvas size to the desired dimensions
+            const width = 200; // Set your desired width here
+            const height = 200; // Set your desired height here
+            canvas.width = width;
+            canvas.height = height;
+
+            // Draw the image onto the canvas with the specified dimensions
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Get the resized image as data URL
+            const dataURL = canvas.toDataURL("image/jpeg", 4.0);
+            console.log(dataURL); // You can use this dataURL as the source of an <img> tag
+          };
+          img.src = event.target.result;
+        };
+
+        reader.readAsDataURL(file);
+      }
+    </script>
+  </body>
+</html>

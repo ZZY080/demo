@@ -1,0 +1,44 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Example</title>
+</head>
+<body>
+    <button onclick="downloadFile()">Download File</button>
+
+    <script>
+        // 存储上次选择的目录
+        let lastDirectory = '';
+
+        function downloadFile() {
+            // 创建下载链接
+            const link = document.createElement('a');
+            link.download = 'filename.txt'; // 文件名
+            link.href = 'data:text/plain;base64,' + btoa('Hello world'); // 文件内容
+            document.body.appendChild(link);
+
+            // 模拟点击事件来启动下载
+            link.click();
+
+            // 如果用户选择了目录，保存目录供下次使用
+            if (window.confirm('Do you want to remember this directory for the next time?')) {
+                localStorage.setItem('lastDirectory', window.prompt('Enter the directory path:', lastDirectory));
+            } else {
+                localStorage.removeItem('lastDirectory');
+            }
+        }
+
+        // 在页面加载时检查是否保存了目录，并显示提示框
+        window.onload = function() {
+            const savedDirectory = localStorage.getItem('lastDirectory');
+            if (savedDirectory) {
+                lastDirectory = savedDirectory;
+                alert('Last directory: ' + lastDirectory);
+            }
+        };
+    </script>
+</body>
+</html>
