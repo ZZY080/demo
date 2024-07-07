@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+      }
+      .list {
+        padding: 40px 200px;
+        width: 100%;
+      }
+      .list-item {
+        width: 100%;
+        padding: 20px 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        border-radius: 20px;
+        background-color: #358ef4;
+        color: #fff;
+        margin-bottom: 10px;
+      }
+      /*list-item 和 moving 同时在一个元素时生效*/
+      .list-item.moving {
+        color: transparent;
+        background-color: transparent;
+        border: 1px dashed gray !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="list">
+      <div draggable="true" class="list-item">1</div>
+      <div draggable="true" class="list-item">2</div>
+      <div draggable="true" class="list-item">3</div>
+      <div draggable="true" class="list-item">4</div>
+      <div draggable="true" class="list-item">5</div>
+      <div draggable="true" class="list-item">6</div>
+      <div draggable="true" class="list-item">7</div>
+      <div draggable="true" class="list-item">8</div>
+      <div draggable="true" class="list-item">9</div>
+    </div>
+    <script type="text/javascript">
+      const list = document.querySelector('.list');
+      // 当前拖动的节点
+      let sourceNode;
+      let flip;
+      // 当拖拽开始的时候
+      list.ondragstart = (e) => {
+        console.log('当前拖动的节点：');
+        console.log(e.target);
+        e.target.classList.add('moving');
+        sourceNode = e.target;
+      };
+
+      list.ondragover = (e) => {
+        e.preventDefault();
+      };
+
+      // 当拖拽放入某个目标节点后
+      list.ondragenter = (e) => {
+        e.preventDefault();
+        if (e.target === list || e.target === sourceNode) {
+          return;
+        }
+        console.log('拖拽到节点：');
+        console.log(e.target);
+        const children = [...list.children];
+        const sourceIndex = children.indexOf(sourceNode);
+        const targetIndex = children.indexOf(e.target);
+        if (sourceIndex < targetIndex) {
+          console.log('下方');
+          list.insertBefore(sourceNode, e.target.nextElementSibling);
+        } else {
+          console.log('上方');
+          list.insertBefore(sourceNode, e.target);
+        }
+      };
+
+      // 当前拖拽节点拖拽结束
+      list.ondragend = (e) => {
+        e.target.classList.remove('moving');
+      };
+    </script>
+  </body>
+</html>
