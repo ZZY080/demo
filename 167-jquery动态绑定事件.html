@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .header {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px 10px;
+        background-color: aquamarine;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">添加一个元素</div>
+    <div class="content"></div>
+    <script src="./js/jquery.js"></script>
+    <script>
+      $(function () {
+        $('.header').on('click', () => {
+          let length = $('.item').length;
+          let item = $(`<div class='item'>${length + 1}</div>`);
+          $('.content').append(item);
+        });
+        $('.content').on('click', '.item', function () {
+          console.log(this);
+          alert('点了我');
+        });
+      });
+    </script>
+  </body>
+</html>
