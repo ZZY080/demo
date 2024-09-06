@@ -4,13 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <style></style>
+    <link rel="stylesheet" href="./css//bootstrap.css" />
+    <style>
+      .socket-container {
+        display: flex;
+        justify-content: center;
+      }
+      .socket-container .socket-content {
+        width: 50%;
+      }
+      .socket-container .socket-content .warning {
+        box-sizing: border-box;
+        margin-top: 100px;
+        border: 1px solid lightblue;
+        border-radius: 20px;
+        padding: 10px 20px;
+      }
+    </style>
   </head>
 
   <body>
-    <div class="btn">btn</div>
-
+    <div class="socket-container">
+      <div class="socket-content">
+        <!-- 提示信息 -->
+        <div class="warning">
+          本工具主要是为了测试服务端websocket功能是否完善可用而开发，主要是通过html5
+          的websocket去连接服务端的websocket,因此，无论你是内网还是外网都可使用!服务端只是实现了接受和发送，这里只是测试而已,Websocket在线模拟请求工具：支持内网和外网；Websocket测试连接格式为
+          ws://IP或域名:端口（示例：ws://127.0.0.1:8080）
+        </div>
+        <button type="button" class="btn btn-primary">Primary</button>
+      </div>
+    </div>
+    <div></div>
     <script src="./js/jquery.js"></script>
+    <script src="./js/bootstrap.js"></script>
     <script src="https://cdn.staticfile.net/socket.io/4.7.4/socket.io.js"></script>
     <script>
       $(function () {
