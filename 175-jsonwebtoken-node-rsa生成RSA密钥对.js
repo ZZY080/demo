@@ -1,7 +1,6 @@
 const NodeRSA = require("node-rsa");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
-
 /**
  *  生成 RSA 密钥对
  */

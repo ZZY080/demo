@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style></style>
+  </head>
+
+  <body>
+    <div class="btn">btn</div>
+
+    <script src="./js/jquery.js"></script>
+    <script src="https://cdn.staticfile.net/socket.io/4.7.4/socket.io.js"></script>
+    <script>
+      $(function () {
+        let socket = io("http://192.168.2.24:8081/message");
+
+        $(".btn").on("click", () => {
+          socket.emit("privateMessage", {
+            chatRoomId: 2,
+            messageObj: {
+              id: 1,
+              msg: "1212",
+              sender: {
+                id: "92f92f0a-bbd6-402f-97a8-3cd08bb17086",
+                name: "曾志远",
+                avatar:
+                  "https://n.sinaimg.cn/sinakd20116/96/w2048h2048/20240323/24a7-52a54c327350fe430e27f8b5847a0bf5.jpg",
+              },
+              recipient: {
+                id: "92f92f0a-bbd6-402f-97a8-3cd08bb17086",
+                name: "曾志远",
+                avatar:
+                  "https://n.sinaimg.cn/sinakd20116/96/w2048h2048/20240323/24a7-52a54c327350fe430e27f8b5847a0bf5.jpg",
+              },
+              reply: [],
+              created_at: "2024-09-02T07:17:14.185Z",
+            },
+          });
+        });
+        socket.on("privateMessage", (data) => {
+          console.log(data);
+        });
+      });
+    </script>
+  </body>
+</html>
