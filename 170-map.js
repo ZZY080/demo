@@ -18,3 +18,5 @@ starMap.set('option3', [
 starMap.delete('option3');
 
 console.log(starMap);
+
+console.log(!![]);
