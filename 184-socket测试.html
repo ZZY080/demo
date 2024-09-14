@@ -121,31 +121,31 @@
       let isConnected = false;
       let messageList = [];
       // 获取数据并展示
-      const getChatMessageList = (chatRoomId) => {
-        $.ajax({
-          async: false,
-          method: "GET",
-          url: `${API_URL}/chat/findChatRoomContent?chatRoomId=${chatRoomId}`,
-          success: (result) => {
-            let { status, message, data } = result;
-            if (status === 200) {
-              messageList = [...data];
-              // json数据展示
-              $("#json-renderer").jsonViewer(messageList, {
-                collapsed: true,
-                withQuotes: false,
-                withLinks: true,
-              });
-            }
-          },
-        });
-      };
+      // const getChatMessageList = (chatRoomId) => {
+      //   $.ajax({
+      //     async: false,
+      //     method: "GET",
+      //     url: `${API_URL}/chat/findChatRoomContent?chatRoomId=${chatRoomId}`,
+      //     success: (result) => {
+      //       let { status, message, data } = result;
+      //       if (status === 200) {
+      //         messageList = [...data];
+      //         // json数据展示
+      //         $("#json-renderer").jsonViewer(messageList, {
+      //           collapsed: true,
+      //           withQuotes: false,
+      //           withLinks: true,
+      //         });
+      //       }
+      //     },
+      //   });
+      // };
 
       // 聊天消息
       let msg = "";
       $(function () {
         // 获取数据并展示
-        getChatMessageList(2);
+        // getChatMessageList(2);
         // 监听协议改变
         $("#select-protocol").on("input", (event) => {
           console.log(event.target.value);
@@ -161,7 +161,12 @@
         });
         // 监听socket连接的点击事件
         $(".connect").on("click", () => {
-          socket = io(`${proptocol}://${domain}:${port}/message`);
+          socket = io(`${proptocol}://${domain}:${port}/message`, {
+            auth: {
+              token:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2WkViRDNSTGRqNyIsImlhdCI6MTcyNjI5MzA3OSwiZXhwIjoxNzI3NTAyNjc5fQ.3C7F2MFtot28gCGiyh-4asQb-ZrRwgphHAtzeKR5oSQ",
+            },
+          });
           socket.on("connect", () => {
             console.log("连接成功");
             isConnected = true;
