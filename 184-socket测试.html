@@ -117,6 +117,7 @@
             $(function () {
               let socket = io('http://192.168.2.24:8081/message');
 
+<<<<<<< HEAD
               $('.btn').on('click', () => {
                 socket.emit('privateMessage', {
                   chatRoomId: 2,
@@ -195,6 +196,82 @@
               $("#msg").on("input", (event) => {
                 msg = event.target.value;
               });
+=======
+      // 聊天消息
+      let msg = "";
+      $(function () {
+        // 获取数据并展示
+        // getChatMessageList(2);
+        // 监听协议改变
+        $("#select-protocol").on("input", (event) => {
+          console.log(event.target.value);
+          proptocol = event.target.value;
+        });
+        // 监听域名改变
+        $("#domain").on("input", (event) => {
+          domain = event.target.value;
+        });
+        // 监听端口号改变
+        $("#port").on("input", (event) => {
+          port = event.target.value;
+        });
+        // 监听socket连接的点击事件
+        $(".connect").on("click", () => {
+          socket = io(`${proptocol}://${domain}:${port}/message`, {
+            auth: {
+              authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2WkViRDNSTGRqNyIsImlhdCI6MTcyNjcyNTA0MywiZXhwIjoxNzI3OTM0NjQzfQ.XNgoW7iFNmD-j9GNRek24nsFwuuwBWAHM8o7VnnRcV0",
+            },
+          });
+          socket.on("connect", () => {
+            console.log("连接成功");
+            isConnected = true;
+          });
+          socket.on("privateMessage", (data) => {
+            console.log(data);
+          });
+        });
+        // 监听socket断开连接
+        $(".disconnect").on("click", () => {
+          socket.disconnect();
+          alert("socket已断开");
+        });
+        // 消息
+        $("#msg").on("input", (event) => {
+          msg = event.target.value;
+        });
+
+        // 发送私人消息
+        $(".send").on("click", () => {
+          if (!isConnected) {
+            return alert("socket还未连接请连接后再发送消息");
+          }
+          if (msg.trim() === "") {
+            return alert("消息不能为空");
+          }
+          socket.emit("message", {
+            chatRoomId: 2,
+            messageObj: {
+              id: 1,
+              msg: msg,
+              sender: {
+                id: "92f92f0a-bbd6-402f-97a8-3cd08bb17086",
+                name: "曾志远",
+                avatar:
+                  "https://n.sinaimg.cn/sinakd20116/96/w2048h2048/20240323/24a7-52a54c327350fe430e27f8b5847a0bf5.jpg",
+              },
+              recipient: {
+                id: "92f92f0a-bbd6-402f-97a8-3cd08bb17086",
+                name: "曾志远",
+                avatar:
+                  "https://n.sinaimg.cn/sinakd20116/96/w2048h2048/20240323/24a7-52a54c327350fe430e27f8b5847a0bf5.jpg",
+              },
+              reply: [],
+              created_at: "2024-09-02T07:17:14.185Z",
+            },
+          });
+          // getChatMessageList(2);
+>>>>>>> e68ae37e4bd54640dc4fa1be689b227384f8bd0f
 
               // 发送私人消息
               $(".send").on("click", () => {

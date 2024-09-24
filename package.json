@@ -20,17 +20,14 @@
   "dependencies": {
     "4": "*",
     "alipay-sdk": "^3.6.1",
-    
+    "axios": "^1.6.8",
     "base32": "^0.0.7",
     "base64url": "^3.0.1",
-    "crypto": "^1.0.1",
-    "node-rsa": "^1.1.1",
-    "spdx-license-ids": "^3.0.18",
-    "uuid": "^10.0.0",
-    "axios": "^1.6.8",
+    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
+    "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
@@ -45,7 +42,10 @@
     "mongoose": "^7.6.4",
     "multer": "*",
     "multiparty": "^4.2.3",
+    "node-rsa": "^1.1.1",
     "paypal-rest-sdk": "^1.8.1",
-    "supertest": "^6.3.3"
+    "spdx-license-ids": "^3.0.18",
+    "supertest": "^6.3.3",
+    "uuid": "^10.0.0"
   }
 }
