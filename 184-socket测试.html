@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>产销策划一体化平台</title>
+    <link
+      rel="shortcut icon"
+      href="https://gw.alipayobjects.com/zos/rmsportal/rlpTLlbMzTNYuZGGCVYM.png"
+    />
+    <link rel="stylesheet" href="./css/bootstrap.css" />
+    <link rel="stylesheet" href="./css/jquery.json-viewer.css" />
+    <link rel="stylesheet" href="./css/layui.css" />
+    <style>
+      .socket-container {
+        display: flex;
+        justify-content: center;
+      }
+      .socket-container .socket-content {
+        width: 50%;
+      }
+      .socket-container .socket-content .warning {
+        box-sizing: border-box;
+        margin-top: 50px;
+        border: 1px solid lightblue;
+        background-color: #f6ffed;
+        line-height: 30px;
+        border-radius: 20px;
+        padding: 10px 20px;
+        user-select: none;
+      }
+      .form-group {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="socket-container">
+      <div class="socket-content">
+        <!-- 提示信息 -->
+        <div class="warning bs-info">
+          本工具主要是为了测试服务端socket.io功能是否完善可用而开发，主要是通过前端socket.io去连接服务端的socket.io,因此，无论你是内网还是外网都可使用!服务端只是实现了接受和发送，这里只是测试而已,socket在线模拟请求工具：支持内网和外网；socket测试连接格式为
+          协议://IP或域名:端口（示例：ws://127.0.0.1:8080或http://127.0.0.1:8080或https://127.0.0.1:8080）
+        </div>
+        <div class="form-group protocol">
+          <label for="select-protocol">请选择协议</label>
+          <select id="select-protocol" class="form-control">
+            <option value="ws">ws</option>
+            <option value="http">http</option>
+            <option value="https">https</option>
+          </select>
+        </div>
+        <div class="form-group domain">
+          <label for="inputHelpBlock">请输入域名或者ip</label>
+          <input
+            type="text"
+            id="domain"
+            class="form-control"
+            aria-describedby="helpBlock"
+          />
+        </div>
+        <div class="form-group port">
+          <label for="inputHelpBlock">请输入端口号</label>
+          <input
+            type="text"
+            id="port"
+            class="form-control"
+            aria-describedby="helpBlock"
+          />
+        </div>
+        <div
+          class="form-group"
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px;
+          "
+        >
+          <div class="btn btn-success connect">连接socket</div>
+          <div class="btn btn-default demonstrate">示例</div>
+          <div class="btn btn-default disconnect">断开连接</div>
+          <div class="btn btn-default clear">清空</div>
+        </div>
+        <div class="form-group">
+          <label for="inputHelpBlock">消息</label>
+        </div>
+        <div
+          class="form-group form-inline"
+          style="display: flex; flex-direction: row"
+        >
+          <input
+            type="text"
+            id="msg"
+            class="form-control"
+            style="display: inline-block; flex: 1"
+          />
+          <div class="send btn btn-success" style="margin-left: 2px">
+            发送消息
+          </div>
+        </div>
+        <div class="form-group messageList">
+          <label for="inputHelpBlock">消息列表</label>
+          <pre id="json-renderer"></pre>
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/jquery.js"></script>
+    <script src="./js/bootstrap.js"></script>
+    <script src="./js/jquery.json-viewer.js"></script>
+    <script src="./js/socket.io.js"></script>
+    <script src="./js/layui.js"></script>
+    <script>
+      <<<<<<< HEAD
+            $(function () {
+              let socket = io('http://192.168.2.24:8081/message');
+
+              $('.btn').on('click', () => {
+                socket.emit('privateMessage', {
+                  chatRoomId: 2,
+                  messageObj: {
+                    id: 1,
+                    msg: '1212',
+      =======
+            let API_URL = "http://localhost:8000";
+            let proptocol = "";
+            let domain = "";
+            let port = "";
+            let socket = null;
+            let isConnected = false;
+            let messageList = [];
+            // 获取数据并展示
+            // const getChatMessageList = (chatRoomId) => {
+            //   $.ajax({
+            //     async: false,
+            //     method: "GET",
+            //     url: `${API_URL}/chat/findChatRoomContent?chatRoomId=${chatRoomId}`,
+            //     success: (result) => {
+            //       let { status, message, data } = result;
+            //       if (status === 200) {
+            //         messageList = [...data];
+            //         // json数据展示
+            //         $("#json-renderer").jsonViewer(messageList, {
+            //           collapsed: true,
+            //           withQuotes: false,
+            //           withLinks: true,
+            //         });
+            //       }
+            //     },
+            //   });
+            // };
+
+            // 聊天消息
+            let msg = "";
+            $(function () {
+              // 获取数据并展示
+              // getChatMessageList(2);
+              // 监听协议改变
+              $("#select-protocol").on("input", (event) => {
+                console.log(event.target.value);
+                proptocol = event.target.value;
+              });
+              // 监听域名改变
+              $("#domain").on("input", (event) => {
+                domain = event.target.value;
+              });
+              // 监听端口号改变
+              $("#port").on("input", (event) => {
+                port = event.target.value;
+              });
+              // 监听socket连接的点击事件
+              $(".connect").on("click", () => {
+                socket = io(`${proptocol}://${domain}:${port}/message`, {
+                  auth: {
+                    token:
+                      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2WkViRDNSTGRqNyIsImlhdCI6MTcyNjI5MzA3OSwiZXhwIjoxNzI3NTAyNjc5fQ.3C7F2MFtot28gCGiyh-4asQb-ZrRwgphHAtzeKR5oSQ",
+                  },
+                });
+                socket.on("connect", () => {
+                  console.log("连接成功");
+                  isConnected = true;
+                });
+                socket.on("privateMessage", (data) => {
+                  console.log(data);
+                });
+              });
+              // 监听socket断开连接
+              $(".disconnect").on("click", () => {
+                socket.disconnect();
+                alert("socket已断开");
+              });
+              // 消息
+              $("#msg").on("input", (event) => {
+                msg = event.target.value;
+              });
+
+              // 发送私人消息
+              $(".send").on("click", () => {
+                if (!isConnected) {
+                  return alert("socket还未连接请连接后再发送消息");
+                }
+                if (msg.trim() === "") {
+                  return alert("消息不能为空");
+                }
+                socket.emit("privateMessage", {
+                  chatRoomId: 2,
+                  messageObj: {
+                    id: 1,
+                    msg: msg,
+      >>>>>>> b02447a489e404bccf3ede2d5df719082c458931
+                    sender: {
+                      id: '92f92f0a-bbd6-402f-97a8-3cd08bb17086',
+                      name: '曾志远',
+                      avatar:
+                        'https://n.sinaimg.cn/sinakd20116/96/w2048h2048/20240323/24a7-52a54c327350fe430e27f8b5847a0bf5.jpg',
+                    },
+                    recipient: {
+                      id: '92f92f0a-bbd6-402f-97a8-3cd08bb17086',
+                      name: '曾志远',
+                      avatar:
+                        'https://n.sinaimg.cn/sinakd20116/96/w2048h2048/20240323/24a7-52a54c327350fe430e27f8b5847a0bf5.jpg',
+                    },
+                    reply: [],
+                    created_at: '2024-09-02T07:17:14.185Z',
+                  },
+                });
+      <<<<<<< HEAD
+              });
+              socket.on('privateMessage', (data) => {
+                console.log(data);
+      =======
+                getChatMessageList(2);
+
+                // 清空消息输入框
+                $("#msg").val("");
+      >>>>>>> b02447a489e404bccf3ede2d5df719082c458931
+              });
+            });
+    </script>
+  </body>
+</html>
