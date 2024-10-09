@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Signature Pad</title>
+    <style>
+      #signature-pad {
+        border: 2px solid #000;
+        width: 600px;
+        height: 300px;
+        cursor: crosshair;
+      }
+      button {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sign the Contract Below</h1>
+    <canvas id="signature-pad"></canvas>
+    <br />
+    <button id="clear-btn">Clear</button>
+    <button id="save-btn">Save Signature</button>
+
+    <script>
+      // signature.js
+
+      const canvas = document.getElementById("signature-pad");
+      const ctx = canvas.getContext("2d");
+
+      // 设置 canvas 尺寸
+      canvas.width = 600;
+      canvas.height = 300;
+
+      // 设置线条样式
+      ctx.strokeStyle = "#000"; // 线条颜色
+      ctx.lineWidth = 2; // 线条宽度
+      ctx.lineCap = "round"; // 线条端点的形状
+
+      let drawing = false;
+
+      // 开始绘制
+      function startDrawing(event) {
+        drawing = true;
+        ctx.beginPath(); // 开始一条新路径
+        ctx.moveTo(event.offsetX, event.offsetY); // 将路径起始点设置为鼠标位置
+      }
+
+      // 绘制过程
+      function draw(event) {
+        if (!drawing) return;
+        ctx.lineTo(event.offsetX, event.offsetY); // 根据鼠标位置绘制线条
+        ctx.stroke(); // 渲染线条
+      }
+
+      // 停止绘制
+      function stopDrawing() {
+        drawing = false;
+        ctx.closePath();
+      }
+
+      // 监听鼠标事件
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", stopDrawing);
+      canvas.addEventListener("mouseout", stopDrawing);
+
+      // 清除画布
+      document.getElementById("clear-btn").addEventListener("click", () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+
+      // 保存签名为图像
+      document.getElementById("save-btn").addEventListener("click", () => {
+        const dataURL = canvas.toDataURL("image/png");
+        console.log(dataURL); // 在控制台查看生成的图像数据
+        alert("Signature saved! You can find the image data in the console.");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>兼职协议合同</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f9;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+      .contract {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: 20px auto;
+      }
+      .contract p,
+      .contract ul {
+        font-size: 16px;
+        color: #555;
+      }
+      .contract ul {
+        margin-top: 10px;
+      }
+      canvas {
+        border: 2px dashed #ccc;
+        width: 100%;
+        height: 200px;
+        margin-top: 20px;
+        cursor: crosshair;
+      }
+      button {
+        display: inline-block;
+        margin: 20px 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .signature-buttons {
+        text-align: center;
+      }
+      #clear-btn-client,
+      #clear-btn-boss {
+        background-color: #dc3545;
+      }
+      #clear-btn-client:hover,
+      #clear-btn-boss:hover {
+        background-color: #c82333;
+      }
+      #signature-pad-client,
+      #signature-pad-boss {
+        margin-bottom: 20px;
+      }
+      #upload-stamp {
+        margin: 20px auto;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>兼职协议合同</h1>
+
+    <div class="contract">
+      <p>商家名称：<strong>字节跳动公司</strong></p>
+      <p>岗位名称：<strong>前端工程师</strong></p>
+      <p>工作地点：<strong>上海市浦东新区世纪大道200号</strong></p>
+      <p>工作时间：<strong>2024年10月1日 至 2024年10月7日</strong></p>
+
+      <p>合同条款如下：</p>
+      <ul>
+        <li>工作时间：每天8小时，具体时间由商家安排。</li>
+        <li>薪资：每小时50元人民币，完成后统一支付。</li>
+        <li>工作任务：推广产品并吸引客户购买。</li>
+      </ul>
+      <p>请在下方签署您的姓名以确认上述条款：</p>
+
+      <h3>客户签名</h3>
+      <canvas id="signature-pad-client"></canvas>
+
+      <h3>公司签名</h3>
+      <canvas id="signature-pad-boss"></canvas>
+
+      <label for="upload-stamp">上传印章图片：</label>
+      <input type="file" id="upload-stamp" accept="image/*" />
+
+      <div class="signature-buttons">
+        <button id="clear-btn-client">清除客户签名</button>
+        <button id="clear-btn-boss">清除老板签名</button>
+        <button id="generate-pdf-btn">生成带签名的PDF</button>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+      const { jsPDF } = window.jspdf;
+
+      // 添加两个画布
+      const canvasClient = document.getElementById("signature-pad-client");
+      const canvasBoss = document.getElementById("signature-pad-boss");
+
+      const ctxClient = canvasClient.getContext("2d");
+      const ctxBoss = canvasBoss.getContext("2d");
+
+      [canvasClient, canvasBoss].forEach((canvas) => {
+        canvas.width = canvas.clientWidth;
+        canvas.height = 200;
+      });
+
+      // 初始化画布上下文
+      [ctxClient, ctxBoss].forEach((ctx) => {
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+      });
+
+      // 通用绘图函数
+      function initSignaturePad(canvas, ctx) {
+        let drawing = false;
+
+        function startDrawing(event) {
+          drawing = true;
+          ctx.beginPath();
+          ctx.moveTo(event.offsetX, event.offsetY);
+        }
+
+        function draw(event) {
+          if (!drawing) return;
+          ctx.lineTo(event.offsetX, event.offsetY);
+          ctx.stroke();
+        }
+
+        function stopDrawing() {
+          drawing = false;
+          ctx.closePath();
+        }
+
+        canvas.addEventListener("mousedown", startDrawing);
+        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("mouseout", stopDrawing);
+      }
+
+      // 初始化两个签名板
+      initSignaturePad(canvasClient, ctxClient);
+      initSignaturePad(canvasBoss, ctxBoss);
+
+      // 清除签名
+      document
+        .getElementById("clear-btn-client")
+        .addEventListener("click", () => {
+          ctxClient.clearRect(0, 0, canvasClient.width, canvasClient.height);
+        });
+      document
+        .getElementById("clear-btn-boss")
+        .addEventListener("click", () => {
+          ctxBoss.clearRect(0, 0, canvasBoss.width, canvasBoss.height);
+        });
+
+      let stampImage = null;
+
+      // 上传印章图片
+      document
+        .getElementById("upload-stamp")
+        .addEventListener("change", (event) => {
+          const file = event.target.files[0];
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            stampImage = new Image();
+            stampImage.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+
+      // 生成带签名和印章的 PDF
+      document
+        .getElementById("generate-pdf-btn")
+        .addEventListener("click", () => {
+          const pdf = new jsPDF();
+          pdf.setFont("Arial", "normal");
+
+          // 添加文本
+          pdf.text("兼职协议合同", 105, 20, { align: "center" });
+          pdf.text("商家名称：字节跳动公司", 10, 30);
+          pdf.text("岗位名称：前端工程师", 10, 40);
+          pdf.text("工作地点：上海市浦东新区世纪大道200号", 10, 50);
+          pdf.text("工作时间：2024年10月1日 至 2024年10月7日", 10, 60);
+          pdf.text("合同条款如下：", 10, 70);
+          pdf.text("1. 工作时间：每天8小时，具体时间由商家安排。", 10, 80);
+          pdf.text("2. 薪资：每小时50元人民币，完成后统一支付。", 10, 90);
+          pdf.text("3. 工作任务：推广产品并吸引客户购买。", 10, 100);
+          pdf.text("客户签名：", 10, 120);
+          pdf.text("公司签名：", 10, 150);
+
+          // 添加客户签名
+          const clientSignatureDataUrl = canvasClient.toDataURL();
+          pdf.addImage(clientSignatureDataUrl, "PNG", 10, 130, 60, 30);
+
+          // 添加公司签名
+          const bossSignatureDataUrl = canvasBoss.toDataURL();
+          pdf.addImage(bossSignatureDataUrl, "PNG", 10, 160, 60, 30);
+
+          // 添加印章
+          if (stampImage) {
+            pdf.addImage(stampImage, "PNG", 150, 130, 40, 40);
+          }
+
+          // 保存PDF
+          pdf.save("合同.pdf");
+        });
+    </script>
+  </body>
+</html>

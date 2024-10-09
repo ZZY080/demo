@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>兼职协议合同</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f9;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+      .contract {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: 20px auto;
+      }
+      .contract p,
+      .contract ul {
+        font-size: 16px;
+        color: #555;
+      }
+      .contract ul {
+        margin-top: 10px;
+      }
+      canvas {
+        border: 2px dashed #ccc;
+        width: 100%;
+        height: 200px;
+        margin-top: 20px;
+        cursor: crosshair;
+      }
+      button {
+        display: inline-block;
+        margin: 20px 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .signature-buttons {
+        text-align: center;
+      }
+      #clear-btn {
+        background-color: #dc3545;
+      }
+      #clear-btn:hover {
+        background-color: #c82333;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>兼职协议合同</h1>
+
+    <div class="contract">
+      <p>商家名称：<strong>字节跳动公司</strong></p>
+      <p>岗位名称：<strong>前端工程师</strong></p>
+      <p>工作地点：<strong>上海市浦东新区世纪大道200号</strong></p>
+      <p>工作时间：<strong>2024年10月1日 至 2024年10月7日</strong></p>
+
+      <p>合同条款如下：</p>
+      <ul>
+        <li>工作时间：每天8小时，具体时间由商家安排。</li>
+        <li>薪资：每小时50元人民币，完成后统一支付。</li>
+        <li>工作任务：推广产品并吸引客户购买。</li>
+      </ul>
+      <p>请在下方签署您的姓名以确认上述条款：</p>
+
+      <canvas id="signature-pad"></canvas>
+
+      <div class="signature-buttons">
+        <button id="clear-btn">清除签名</button>
+        <button id="generate-pdf-btn">生成带签名的PDF</button>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+      const { jsPDF } = window.jspdf;
+
+      // 预加载思源字体（可以替换成其他支持中文的字体）
+      const fontUrl =
+        "https://cdnjs.cloudflare.com/ajax/libs/jsPDF/2.5.1/ttfs/msyh.ttf";
+      fetch(fontUrl)
+        .then((response) => response.arrayBuffer())
+        .then((buffer) => {
+          jsPDF.API.addFileToVFS("msyh.ttf", buffer);
+          jsPDF.API.addFont("msyh.ttf", "msyh", "normal");
+        });
+
+      const canvas = document.getElementById("signature-pad");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = canvas.clientWidth;
+      canvas.height = 200;
+
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+
+      let drawing = false;
+
+      function startDrawing(event) {
+        drawing = true;
+        ctx.beginPath();
+        ctx.moveTo(event.offsetX, event.offsetY);
+      }
+
+      function draw(event) {
+        if (!drawing) return;
+        ctx.lineTo(event.offsetX, event.offsetY);
+        ctx.stroke();
+      }
+
+      function stopDrawing() {
+        drawing = false;
+        ctx.closePath();
+      }
+
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", stopDrawing);
+      canvas.addEventListener("mouseout", stopDrawing);
+
+      document.getElementById("clear-btn").addEventListener("click", () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+
+      document
+        .getElementById("generate-pdf-btn")
+        .addEventListener("click", () => {
+          const pdf = new jsPDF();
+
+          // 使用中文字体
+          pdf.setFont("msyh");
+
+          pdf.setFontSize(16);
+          pdf.text("兼职协议合同", 105, 20, null, null, "center");
+          pdf.setFontSize(12);
+          pdf.text("商家名称：字节跳动公司", 20, 40);
+          pdf.text("岗位名称：前端工程师", 20, 50);
+          pdf.text("工作地点：上海市浦东新区世纪大道200号", 20, 60);
+          pdf.text("工作时间：2024年10月1日 至 2024年10月7日", 20, 70);
+
+          pdf.text("合同条款如下：", 20, 90);
+          pdf.text("- 工作时间：每天8小时，具体时间由商家安排。", 20, 100);
+          pdf.text("- 薪资：每小时50元人民币，完成后统一支付。", 20, 110);
+          pdf.text("- 工作任务：推广产品并吸引客户购买。", 20, 120);
+
+          pdf.text("请在下方签署您的姓名以确认上述条款：", 20, 140);
+
+          // 将 canvas 签名转换为图像数据
+          const imgData = canvas.toDataURL("image/png");
+
+          // 在 PDF 中添加签名图像
+          pdf.addImage(imgData, "PNG", 20, 150, 170, 60);
+
+          // 保存 PDF 文件
+          pdf.save("兼职协议合同_带签名.pdf");
+        });
+    </script>
+  </body>
+</html>

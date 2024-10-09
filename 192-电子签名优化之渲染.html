@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Signature Pad</title>
+    <style>
+      #signature-pad {
+        border: 2px solid #000;
+        width: 600px;
+        height: 300px;
+        cursor: crosshair;
+      }
+      button {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sign the Contract Below</h1>
+    <canvas id="signature-pad"></canvas>
+    <br />
+    <button id="clear-btn">Clear</button>
+    <button id="save-btn">Save Signature</button>
+    <button id="generate-pdf-btn">Generate PDF</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="signature.js"></script>
+    <script>
+      // signature.js
+
+      const { jsPDF } = window.jspdf; // 引入 jsPDF
+
+      const canvas = document.getElementById("signature-pad");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = 600;
+      canvas.height = 300;
+
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+
+      let drawing = false;
+
+      function startDrawing(event) {
+        drawing = true;
+        ctx.beginPath();
+        ctx.moveTo(event.offsetX, event.offsetY);
+      }
+
+      function draw(event) {
+        if (!drawing) return;
+        ctx.lineTo(event.offsetX, event.offsetY);
+        ctx.stroke();
+      }
+
+      function stopDrawing() {
+        drawing = false;
+        ctx.closePath();
+      }
+
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", stopDrawing);
+      canvas.addEventListener("mouseout", stopDrawing);
+
+      document.getElementById("clear-btn").addEventListener("click", () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+
+      document.getElementById("save-btn").addEventListener("click", () => {
+        const dataURL = canvas.toDataURL("image/png");
+        console.log(dataURL);
+        alert("Signature saved! You can find the image data in the console.");
+      });
+
+      // 生成 PDF 并将签名添加到 PDF 中
+      document
+        .getElementById("generate-pdf-btn")
+        .addEventListener("click", () => {
+          const pdf = new jsPDF();
+
+          // 将 canvas 转换为图像数据
+          const imgData = canvas.toDataURL("image/png");
+
+          // 在 PDF 中添加图像
+          pdf.addImage(imgData, "PNG", 10, 10, 180, 80); // 10, 10 为位置，180, 80 为图像宽高
+          pdf.text("Contract Signature", 10, 100); // 在图像下方添加文字
+          pdf.save("signature.pdf"); // 保存 PDF
+        });
+    </script>
+  </body>
+</html>

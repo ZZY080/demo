@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>电子签名示例</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 20px;
+      }
+
+      #signature-pad {
+        border: 2px solid #000;
+        width: 400px;
+        height: 200px;
+        background-color: #f9f9f9;
+        margin-bottom: 10px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 5px;
+      }
+
+      #pdf-container {
+        width: 600px;
+        height: 800px;
+        border: 1px solid #ccc;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>电子签名示例</h1>
+
+    <p>请在下方签名框中签名：</p>
+    <canvas id="signature-pad"></canvas>
+
+    <div>
+      <button id="clear-signature">清除签名</button>
+      <button id="save-signature">保存签名</button>
+    </div>
+
+    <h2>预览 PDF</h2>
+    <div id="pdf-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js"></script>
+    <script>
+      // 签名功能
+      const canvas = document.getElementById("signature-pad");
+      const ctx = canvas.getContext("2d");
+      let drawing = false;
+
+      canvas.addEventListener("mousedown", () => {
+        drawing = true;
+      });
+      canvas.addEventListener("mouseup", () => {
+        drawing = false;
+        ctx.beginPath();
+      });
+      canvas.addEventListener("mousemove", draw);
+
+      function draw(event) {
+        if (!drawing) return;
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "black";
+
+        ctx.lineTo(
+          event.clientX - canvas.offsetLeft,
+          event.clientY - canvas.offsetTop
+        );
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(
+          event.clientX - canvas.offsetLeft,
+          event.clientY - canvas.offsetTop
+        );
+      }
+
+      // 清除签名
+      document
+        .getElementById("clear-signature")
+        .addEventListener("click", () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+      // 保存签名 (生成图像)
+      document
+        .getElementById("save-signature")
+        .addEventListener("click", () => {
+          const signatureImage = canvas.toDataURL("image/png");
+          console.log("签名保存为图像:", signatureImage);
+          alert("签名已保存!");
+        });
+
+      // 使用 PDF.js 预览 PDF
+      const url = "path-to-your-pdf-document.pdf"; // PDF文件的路径
+
+      const pdfContainer = document.getElementById("pdf-container");
+
+      const renderPDF = async (url) => {
+        const pdf = await pdfjsLib.getDocument(url).promise;
+        const page = await pdf.getPage(1);
+
+        const scale = 1.5;
+        const viewport = page.getViewport({ scale });
+
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport,
+        };
+
+        await page.render(renderContext).promise;
+
+        pdfContainer.appendChild(canvas);
+      };
+
+      renderPDF(url);
+    </script>
+  </body>
+</html>
