@@ -106,6 +106,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="./js/source-han-sans-normal.js"></script>
     <script>
       const { jsPDF } = window.jspdf;
 
@@ -190,8 +191,19 @@
       document
         .getElementById("generate-pdf-btn")
         .addEventListener("click", () => {
-          const pdf = new jsPDF();
-          pdf.setFont("Arial", "normal");
+          const pdf = new jsPDF({
+            orientation: "p",
+            unit: "mm",
+            format: "a4",
+            putOnlyUsedFonts: true,
+            floatPrecision: 16,
+          });
+          pdf.addFont(
+            "SourceHanSansCN-Normal.ttf",
+            "SourceHanSansCN-Normal",
+            "normal"
+          );
+          pdf.setFont("SourceHanSansCN-Normal");
 
           // 添加文本
           pdf.text("兼职协议合同", 105, 20, { align: "center" });
@@ -204,15 +216,15 @@
           pdf.text("2. 薪资：每小时50元人民币，完成后统一支付。", 10, 90);
           pdf.text("3. 工作任务：推广产品并吸引客户购买。", 10, 100);
           pdf.text("客户签名：", 10, 120);
-          pdf.text("公司签名：", 10, 150);
+          pdf.text("公司签名：", 10, 160);
 
           // 添加客户签名
           const clientSignatureDataUrl = canvasClient.toDataURL();
-          pdf.addImage(clientSignatureDataUrl, "PNG", 10, 130, 60, 30);
+          pdf.addImage(clientSignatureDataUrl, "PNG", 10, 122, 60, 30);
 
           // 添加公司签名
           const bossSignatureDataUrl = canvasBoss.toDataURL();
-          pdf.addImage(bossSignatureDataUrl, "PNG", 10, 160, 60, 30);
+          pdf.addImage(bossSignatureDataUrl, "PNG", 10, 162, 60, 30);
 
           // 添加印章
           if (stampImage) {
