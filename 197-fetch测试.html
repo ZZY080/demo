@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const handelData = async () => {
+        try {
+          const response = await fetch(`http://192.168.2.15:8080/test/users`);
+          console.log(response);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log(data instanceof Array);
+        } catch (error) {}
+      };
+      handelData();
+    </script>
+  </body>
+</html>
