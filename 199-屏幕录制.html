@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const button = document.createElement("button");
+      button.innerHTML = "capture";
+      document.body.append(button);
+      button.addEventListener("click", async () => {
+        // 获取媒体流
+        const stream = await navigator.mediaDevices.getDisplayMedia();
+        // 使用媒体记录API记录数据
+        const recoder = new MediaRecorder(stream);
+        recoder.start();
+        // 获取媒体流的轨道
+        const [video] = stream.getVideoTracks();
+        const [audio] = stream.getAudioTracks();
+        // 媒体流停止,则停止记录
+        video.addEventListener("ended", () => {
+          recoder.stop();
+        });
+        // audio.addEventListener("ended", () => {
+        //   recoder.stop();
+        // });
+        // 监听媒体记录中数据是否可利用
+        recoder.addEventListener("dataavailable", (evt) => {
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(evt.data);
+          a.download = "capture.webm";
+          a.click();
+        });
+      });
+    </script>
+  </body>
+</html>
