@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-time Audio Streaming</title>
+  <script src="https://cdn.socket.io/4.5.1/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Real-time Audio Streaming</h1>
+  <script>
+    const SOCKET_SERVER_URL = "http://192.168.2.21:8080";  // WebSocket 服务器 URL
+    const socket = io(SOCKET_SERVER_URL, { transports: ['websocket'] });
+
+    async function getAudioStream() {
+      try {
+        // 请求麦克风权限并获取音频流
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        // 使用 AudioContext 创建一个实时音频处理上下文
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // 将获取到的音频流连接到 AudioContext
+        const source = audioContext.createMediaStreamSource(stream);
+
+        // 创建一个 ScriptProcessorNode 来处理音频流
+        const processor = audioContext.createScriptProcessor(4096, 1, 1);  // 每次处理 4096 个音频样本
+
+        // 设置处理逻辑
+        processor.onaudioprocess = (event) => {
+          // 获取当前音频处理的缓冲区数据
+          const inputBuffer = event.inputBuffer;
+
+          // 将音频缓冲区数据发送到后端
+          if (socket) {
+            const audioData = inputBuffer.getChannelData(0);  // 获取第一个音频通道的数据
+            socket.emit("audio-stream", audioData);
+          }
+        };
+
+        // 连接节点：音频源 -> 处理器 -> 输出
+        source.connect(processor);
+        processor.connect(audioContext.destination);  // 将其连接到输出，以便播放音频
+
+      } catch (err) {
+        console.error("Error accessing media devices:", err);
+      }
+    }
+
+    // 启动音频流捕获
+    getAudioStream();
+  </script>
+</body>
+</html>
