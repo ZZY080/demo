@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Stripe Payment Example</h1>
+    <img src="https://loremflickr.com/30/30" alt="" />
+    <!-- Payment Form -->
+    <form id="payment-form">
+      <div id="card-element">
+        <!-- A Stripe Element will be inserted here. -->
+      </div>
+
+      <!-- Used to display form errors. -->
+      <div id="card-errors" role="alert"></div>
+
+      <button id="submit">Pay</button>
+    </form>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      const stripe = Stripe(
+        "pk_test_51QXJNJCZ897RukPiITcFYr5y5EDEVJAVGgI3iMpRGyCKZOOwkKGKhMl9RGBpNkiHACHKDx7L8fOh0mtYnXPs4zw700pavMKHfQ"
+      );
+      const elements = stripe.elements();
+      const form = document.getElementById("payment-form");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        // 从后端获取 payment intent 的 client secret
+        const response = await fetch("http://192.168.2.6:8080/stripe/pay", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: 5000, currency: "usd" }), // 5000 分 = 50 美元
+        });
+        const json = await response.json();
+        if (response.ok) {
+          const { clientSecret } = json;
+          const card = elements.create("card");
+          card.mount("#card-element");
+          if (card) {
+            const { error, paymentIntent } = await stripe.confirmCardPayment(
+              clientSecret,
+              {
+                payment_method: {
+                  card: card,
+                },
+              }
+            );
+            if (error) {
+              // Handle payment errors
+              const errorElement = document.getElementById("card-errors");
+              errorElement.textContent = error.message;
+            } else if (paymentIntent.status === "succeeded") {
+              alert("Payment successful!");
+            }
+          }
+          console.log(json);
+        }
+      });
+    </script>
+  </body>
+</html>
