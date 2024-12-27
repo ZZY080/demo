@@ -22,17 +22,22 @@
     <script src="https://js.stripe.com/v3/"></script>
     <script>
       const stripe = Stripe(
-        "pk_test_51QXJNJCZ897RukPiITcFYr5y5EDEVJAVGgI3iMpRGyCKZOOwkKGKhMl9RGBpNkiHACHKDx7L8fOh0mtYnXPs4zw700pavMKHfQ"
+        "pk_test_51QaWE3ConpAU9S9m2AQeBRhR49oLCVenEnaTkGfgDH3D1ng9WtG4GQUB1GpNoLtonXPozWNrADlkVdzyolRiwdHi00BWtPrS8y"
       );
       const elements = stripe.elements();
       const form = document.getElementById("payment-form");
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
         // 从后端获取 payment intent 的 client secret
-        const response = await fetch("http://192.168.2.6:8080/stripe/pay", {
+        const response = await fetch("http://192.168.2.8:8080/stripe/pay", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: 5000, currency: "usd" }), // 5000 分 = 50 美元
+          body: JSON.stringify({
+            email: "2916363658@qq.com",
+            name: "dianel",
+            amount: 500000,
+            currency: "usd",
+          }), // 5000 分 = 50 美元
         });
         const json = await response.json();
         if (response.ok) {
