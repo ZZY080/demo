@@ -1,16 +1,15 @@
 // 创建闭包
 function outerFunction() {
-    let outerVariable = 'I am outside!';
-    let count =0 ;
+  let outerVariable = 'I am outside!';
+  let count = 0;
 
-    function innerFunction() {
-        console.log(outerVariable); // 内部函数可以访问外部函数作用域中的变量
-        count+=1;
-        return count;
-    }
+  function innerFunction() {
+    count += 1;
+    return count;
+  }
 
-    // 返回内部函数
-    return innerFunction;
+  // 返回内部函数
+  return innerFunction;
 }
 
 // 调用外部函数，获取内部函数 由于函数属于复杂数据对象因此为引用
