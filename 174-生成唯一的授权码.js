@@ -79,7 +79,7 @@ function validateActivationCode(encodedCode) {
 
 // 示例：生成一个有效期为1小时的授权码
 // const oneHourInMillis = 60 * 60 * 1000;
-const oneHourInMillis = 1 * 1000;
+const oneHourInMillis = 60 * 60 * 1000;
 const activationCode = generateActivationCodeWithExpiry(oneHourInMillis);
 console.log("Generated Activation Code:", activationCode);
 
