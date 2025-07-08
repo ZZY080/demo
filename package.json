@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
+    "test": "echo \"No tests yet\" && exit 0",
     "prepare": "husky install"
   },
   "repository": {

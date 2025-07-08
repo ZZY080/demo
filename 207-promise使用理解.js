@@ -16,6 +16,7 @@ const promise3 = new Promise((resolve, reject) => {
   //   setTimeout(() => {
   //     resolve("promise3-3000ms");
   //   }, 3000);
+  console.log(1);
 });
 
 const promiseAll = [promise1, promise2, promise3];
