@@ -5,8 +5,15 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
+    "gen:api": "node scripts/generate-api.js",
+    "gen:api:all": "node scripts/generate-api.js --all",
     "test": "echo \"No tests yet\" && exit 0",
     "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint:api"
+    }
   },
   "repository": {
     "type": "git",
@@ -57,6 +64,8 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "husky": "^8.0.0"
+    "chalk": "^4.1.2",
+    "husky": "^8.0.0",
+    "inquirer": "^8.2.4"
   }
 }

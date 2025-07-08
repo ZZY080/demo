@@ -1,0 +1,12 @@
+{
+  "user": {
+    "path": "/users",
+    "dto": "User",
+    "methods": ["list", "detail", "create", "update", "delete"]
+  },
+  "order": {
+    "path": "/orders",
+    "dto": "Order",
+    "methods": ["list", "detail", "cancel"]
+  }
+}
