@@ -2,12 +2,13 @@ const Core = require("@alicloud/pop-core");
 const fs = require("fs");
 const path = require("path");
 
+require("dotenv").config({ path: "./.development.env" });
 // 创建客户端实例
-const client = new Core({
-  accessKeyId: "LTAI5tFCm7zK19ewgEvVaAET",
-  accessKeySecret: "J7x8QzG228LxJevvQ2F7e85EbO6MKm",
-  endpoint: "https://dm.aliyuncs.com",
-  apiVersion: "2015-11-23",
+var client = new Core({
+  accessKeyId: process.env.ALIYUN_ACCESS_KEY_ID, // 替换为您的AccessKeyId
+  accessKeySecret: process.env.ALIYUN_ACCESS_KEY_SECRET, // 替换为您的AccessKeySecret
+  endpoint: process.env.ALIYUN_MAIL_ENDPOINT, // 邮件推送服务的Endpoint
+  apiVersion: "2015-11-23", // 推荐使用此版本
 });
 
 // 读取附件并转换为Base64
