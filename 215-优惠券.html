@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .wrapper {
+        padding: 10px;
+        background-color: #fff;
+        overflow: hidden;
+      }
+      .quan-item-wrapper {
+        position: relative;
+        overflow: hidden;
+      }
+      .quan-item-main {
+        height: 100px;
+        width: 160px;
+        background-color: antiquewhite;
+        border-radius: 10px;
+        border: 1px solid red;
+      }
+
+      .quan-item-main .circle-left {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: -20px;
+        height: 40px;
+        width: 40px;
+        border-radius: 20px;
+        background-color: #fff;
+        z-index: 2;
+      }
+      .quan-item-main .circle-right {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: -20px;
+        height: 40px;
+        width: 40px;
+        border-radius: 20px;
+        background-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="quan-item-wrapper">
+        <div class="quan-item-main">
+          <div class="circle-left"></div>
+          <div class="circle-right"></div>
+        </div>
+      </div>
+    </div>
+    <img
+      src="https://sh-01-bucket-lvc-dev-private.oss-cn-shanghai.aliyuncs.com/file-in-OSS.png?OSSAccessKeyId=LTAI5tJjDmJcfZZQvf4FuB22&Expires=1754376437&Signature=cvhl2VLmilVqrzvF7EwK%2FQY9MRo%3D"
+      alt=""
+    />
+  </body>
+</html>

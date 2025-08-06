@@ -12,6 +12,7 @@ async function initOssClient() {
       bucket: process.env.ALIYUN_OSS_BUCKET,
       endpoint: process.env.ALIYUN_OSS_ENDPOINT,
     });
+
     return client;
   } catch (err) {
     console.log("初始化OSS客户端失败:", err);
@@ -24,7 +25,6 @@ async function generateSignedUrl(client, objectName, expires = 3600) {
       expires: expires, // URL有效时间(秒)，默认1小时
       method: "GET",
     });
-    console.log(`签名URL: ${url}`);
     return url;
   } catch (err) {
     console.error("生成签名URL失败:", err);
@@ -35,9 +35,17 @@ async function uploadFile(client, filePath, objectName) {
   try {
     // 使用文件流上传
     const stream = fs.createReadStream(filePath);
-    const result = await client.putStream(objectName, stream);
-    const signedUrl = await generateSignedUrl(client, "file-in-OSS.png");
-    console.log("upload result:", signedUrl, result);
+    const result = await client.putStream(objectName, stream, {
+      timeout: 3,
+      partSize: 0,
+      parallel: 20,
+      headers: {
+        "x-oss-forbid-overwrite": "false", // 禁止覆盖文件
+      },
+    });
+    console.log("上传结果:", result);
+    const signedUrl = await generateSignedUrl(client, objectName);
+    console.log("签名url:", signedUrl);
     console.log(`文件 ${filePath} 已成功上传至 ${objectName}`);
     return result;
   } catch (err) {
@@ -75,7 +83,7 @@ async function main() {
     // 下载文件
     await downloadFile(
       client,
-      "file-in-OSS.png",
+      fileNameInOss,
       path.join(__dirname, "file-in-OSS2.png")
     );
   } catch (err) {
