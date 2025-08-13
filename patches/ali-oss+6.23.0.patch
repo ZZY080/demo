@@ -1,0 +1,13 @@
+diff --git a/node_modules/ali-oss/lib/common/utils/policy2Str.ts b/node_modules/ali-oss/lib/common/utils/policy2Str.ts
+index d088a3c..ca5eede 100644
+--- a/node_modules/ali-oss/lib/common/utils/policy2Str.ts
++++ b/node_modules/ali-oss/lib/common/utils/policy2Str.ts
+@@ -4,7 +4,7 @@ export function policy2Str(policy: string | object) {
+     if (typeof policy === 'string') {
+       try {
+         policyStr = JSON.stringify(JSON.parse(policy));
+-      } catch (err) {
++      } catch (err:any) {
+         throw new Error(`Policy string is not a valid JSON: ${err.message}`);
+       }
+     } else {
