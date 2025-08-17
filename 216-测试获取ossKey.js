@@ -21,7 +21,7 @@ const url =
 const ossKey = getOssKey(url);
 console.log(ossKey);
 
-let fileExtension = path.extname("/a/b/c.png"); // ".jpg"
+let fileExtension = path.extname("eabe5ba7-d952-40ca-8367-a89c4a5764c6.png"); // ".jpg"
 console.log("fileExtension:", fileExtension);
 
 const pathname = "/dsfds/fdsfdsf".replace(/^\/(?!$)/, ""); // 只替换第一个 / 且不影响空字符串
