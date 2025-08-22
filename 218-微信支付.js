@@ -21,7 +21,31 @@ const config = {
   apiKey: process.env.WECHAT_API_KEY, // 商户号上的apiKey
   notifyUrl: process.env.WECHAT_NOTIFY_URL,
 };
+// 生成签名
+const generateSign = (params) => {
+  const sorted = Object.keys(params)
+    .filter((key) => params[key] && key !== "sign")
+    .sort()
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  return crypto
+    .createHash("md5")
+    .update(sorted + "&key=" + config.apiKey)
+    .digest("hex")
+    .toUpperCase();
+};
 
+// 微信支付要求的时间格式：yyyyMMddHHmmss
+function formatWechatTime(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+
+  return `${year}${month}${day}${hours}${minutes}${seconds}`;
+}
 app.post("/api/getOpenid", async (req, res) => {
   try {
     const { code } = req.body;
@@ -35,7 +59,6 @@ app.post("/api/getOpenid", async (req, res) => {
     if (response.data.errcode) {
       throw new Error(response.data.errmsg);
     }
-    console.log("openid:", response.data.openid);
     res.json({
       code: 0,
       openid: response.data.openid,
@@ -44,20 +67,6 @@ app.post("/api/getOpenid", async (req, res) => {
     res.json({ code: 500, message: error.message });
   }
 });
-
-// 生成签名
-function generateSign(params) {
-  const sorted = Object.keys(params)
-    .filter((key) => params[key] && key !== "sign")
-    .sort()
-    .map((key) => `${key}=${params[key]}`)
-    .join("&");
-  return crypto
-    .createHash("md5")
-    .update(sorted + "&key=" + config.apiKey)
-    .digest("hex")
-    .toUpperCase();
-}
 
 // 小程序支付接口
 app.post("/pay/wxpay", async (req, res) => {
@@ -70,17 +79,17 @@ app.post("/pay/wxpay", async (req, res) => {
 
     // 构建微信支付参数
     const params = {
-      appid: config.appId,
-      mch_id: config.mchId,
-      nonce_str: uuidv4().replace(/-/g, ""),
-      body: desc,
+      appid: config.appId, // 微信小程序appid
+      mch_id: config.mchId, // 微信支付商户号id
+      nonce_str: uuidv4().replace(/-/g, ""), //随机字符串  防止重放攻击，确保每次请求唯一
+      body: desc, //  商品描述
       out_trade_no:
-        "MINI_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5),
-      total_fee: Math.round(total * 100), // 转换为分
-      spbill_create_ip: req.ip.replace("::ffff:", "") || "127.0.0.1",
-      notify_url: config.notifyUrl,
-      trade_type: "JSAPI",
-      openid: openid,
+        "MINI_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5), // 商户订单号
+      total_fee: Math.round(total * 100), //订单金额 转换为分
+      spbill_create_ip: req.ip.replace("::ffff:", "") || "127.0.0.1", // 终端IP
+      notify_url: config.notifyUrl, // 通知地址
+      trade_type: "JSAPI", // 交易类型
+      openid: openid, //  用户标识
     };
 
     // 生成签名
@@ -214,6 +223,185 @@ app.get("/pay/query/:orderId", async (req, res) => {
     const xml = new Builder().buildObject({ xml: params });
     const response = await axios.post(
       "https://api.mch.weixin.qq.com/pay/orderquery",
+      xml,
+      {
+        headers: { "Content-Type": "application/xml" },
+      }
+    );
+
+    const result = await new Promise((resolve, reject) => {
+      parseString(response.data, (err, result) => {
+        err ? reject(err) : resolve(result);
+      });
+    });
+
+    res.json({ code: 0, data: result.xml });
+  } catch (error) {
+    res.json({ code: 500, message: error.message });
+  }
+});
+
+// 退款接口
+app.post("/pay/refund", async (req, res) => {
+  try {
+    const { orderId, refundDesc, total, refund } = req.body;
+
+    if (!orderId || !total || !refund) {
+      return res.json({
+        code: 400,
+        message: "缺少必要参数: orderId, total, refund",
+      });
+    }
+
+    // 构建退款参数
+    const params = {
+      appid: config.appId,
+      mch_id: config.mchId,
+      nonce_str: uuidv4().replace(/-/g, ""),
+      out_trade_no: orderId, // 商户订单号
+      out_refund_no:
+        "REFUND_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5), // 商户退款单号
+      total_fee: Math.round(total * 100), // 订单金额(分)
+      refund_fee: Math.round(refund * 100), // 退款金额(分)
+      notify_url: config.notifyUrl.replace("pay/notify", "pay/refund/notify"), // 退款通知地址
+    };
+
+    // 如果有退款描述，添加
+    if (refundDesc) {
+      params.refund_desc = refundDesc;
+    }
+
+    // 生成签名
+    params.sign = generateSign(params);
+
+    // 转换为XML
+    const xml = new Builder().buildObject({ xml: params });
+
+    // 微信支付退款需要双向证书，这里假设你已经将证书文件放在项目目录下
+    const certPath = process.env.WECHAT_CERT_PATH; // 证书路径
+    const keyPath = process.env.WECHAT_KEY_PATH; // 密钥路径
+
+    if (!certPath || !keyPath) {
+      throw new Error("微信支付证书配置缺失");
+    }
+
+    // 读取证书文件
+    const cert = fs.readFileSync(certPath);
+    const key = fs.readFileSync(keyPath);
+
+    // 调用微信退款接口
+    const response = await axios.post(
+      "https://api.mch.weixin.qq.com/secapi/pay/refund",
+      xml,
+      {
+        headers: { "Content-Type": "application/xml" },
+        httpsAgent: new https.Agent({
+          cert: cert,
+          key: key,
+        }),
+      }
+    );
+
+    // 解析XML响应
+    const result = await new Promise((resolve, reject) => {
+      parseString(response.data, (err, result) => {
+        err ? reject(err) : resolve(result);
+      });
+    });
+
+    if (result.xml.return_code[0] !== "SUCCESS") {
+      throw new Error(result.xml.return_msg[0]);
+    }
+
+    if (result.xml.result_code[0] !== "SUCCESS") {
+      throw new Error(result.xml.err_code_des[0]);
+    }
+
+    res.json({
+      code: 0,
+      data: {
+        refundId: result.xml.refund_id[0],
+        refundFee: result.xml.refund_fee[0] / 100,
+      },
+      message: "退款申请成功",
+    });
+  } catch (error) {
+    console.error("退款申请失败:", error.message);
+    res.json({
+      code: 500,
+      message: error.message || "退款申请失败",
+    });
+  }
+});
+
+// 退款回调接口
+app.post("/pay/refund/notify", (req, res) => {
+  let xmlData = "";
+  req.on("data", (chunk) => {
+    xmlData += chunk;
+  });
+
+  req.on("end", () => {
+    parseString(xmlData, (err, result) => {
+      if (err) {
+        return res.send(
+          "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[解析失败]]></return_msg></xml>"
+        );
+      }
+
+      const data = result.xml;
+      console.log("退款回调收到:", data);
+
+      // 验证签名
+      const sign = data.sign[0];
+      const verifyData = {};
+      Object.keys(data).forEach((key) => {
+        if (key !== "sign") {
+          verifyData[key] = data[key][0];
+        }
+      });
+
+      if (generateSign(verifyData) !== sign) {
+        return res.send(
+          "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[签名验证失败]]></return_msg></xml>"
+        );
+      }
+
+      if (
+        data.return_code[0] === "SUCCESS" &&
+        data.refund_status[0] === "SUCCESS"
+      ) {
+        console.log("退款成功:", {
+          orderId: data.out_trade_no[0],
+          refundId: data.out_refund_no[0],
+          refundFee: data.refund_fee[0] / 100,
+          transactionId: data.transaction_id[0],
+          refundTime: data.success_time[0],
+        });
+        // TODO: 更新订单退款状态
+      }
+
+      res.send(
+        "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>"
+      );
+    });
+  });
+});
+
+// 查询退款状态
+app.get("/pay/refund/query/:refundId", async (req, res) => {
+  try {
+    const params = {
+      appid: config.appId,
+      mch_id: config.mchId,
+      out_refund_no: req.params.refundId,
+      nonce_str: uuidv4().replace(/-/g, ""),
+    };
+    params.sign = generateSign(params);
+
+    const xml = new Builder().buildObject({ xml: params });
+    const response = await axios.post(
+      "https://api.mch.weixin.qq.com/pay/refundquery",
       xml,
       {
         headers: { "Content-Type": "application/xml" },
