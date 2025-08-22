@@ -59,6 +59,7 @@ app.post("/api/getOpenid", async (req, res) => {
     if (response.data.errcode) {
       throw new Error(response.data.errmsg);
     }
+    console.log(response.data);
     res.json({
       code: 0,
       openid: response.data.openid,
