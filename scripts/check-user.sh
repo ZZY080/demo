@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # 允许提交的白名单用户（区分大小写）
-ALLOWED_USERS=("admin" "developer1" "developer2" "kenny")
-ALLOWED_EMAILS=("admin@company.com" "dev1@company.com" "dev2@company.com" "2916363651@qq.com")
+ALLOWED_USERS=("admin" "developer1" "developer2" "kenny" "zhiyuanzeng")
+ALLOWED_EMAILS=("admin@company.com" "dev1@company.com" "dev2@company.com" "2916363651@qq.com" "2916363651@qq.com")
 
 # 获取当前 Git 配置
 CURRENT_NAME=$(git config user.name)
