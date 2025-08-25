@@ -421,6 +421,6 @@ app.get("/pay/refund/query/:refundId", async (req, res) => {
   }
 });
 
-app.listen(PORT, "192.168.2.6", () => {
-  console.log(`微信支付服务运行在 http://192.168.2.6:${PORT}`);
+app.listen(PORT, "192.168.2.8", () => {
+  console.log(`微信支付服务运行在 http://192.168.2.8:${PORT}`);
 });
