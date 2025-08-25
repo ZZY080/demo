@@ -132,7 +132,7 @@ app.post("/pay/unified", async (req, res) => {
       payParams.paySign = generateSign(payParams);
       return res.json({ code: 0, data: { orderNo, payParams } });
     }
-    //  pc H5 网页支付
+    //  PC H5 网页支付
     if (tradeType === "MWEB") {
       return res.json({ code: 0, data: { orderNo, mwebUrl: r.mweb_url[0] } });
     }
